@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  SmartCampus
+
+  Created by Dennis Madsen on 13/03/12.
+  Copyright (c) 2012 Aalborg Universitet. All rights reserved.
+*/
+
+"Floor" = "Etage";
+"of" = "af";
+"None" = "Intet";
+"No floors" = "Ingen etager";
+"Online mode" = "Online tilstand";
+"Offline mode" = "Offline tilstand";
+"Clear route" = "Nulstil route";
+"Measure" = "Lav opmåling";
+"Wi-Fi measure" = "Wi-Fi opmåling";
+"Edit graph" = "Ændrer graf";
+"What's nearby?" = "I nærheden?";
+"Select nearby" = "Vælg i nærheden";

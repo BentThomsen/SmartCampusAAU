@@ -1,0 +1,290 @@
+package com.smartcampus.webclient.snifferbackend;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.smartcampus.indoormodel.AbsoluteLocation;
+import com.smartcampus.indoormodel.Building;
+import com.smartcampus.indoormodel.SymbolicLocation;
+import com.smartcampus.indoormodel.graph.IGraph;
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.webclient.ConnectionInfo;
+import com.smartcampus.webclient.JsonWebClient;
+import com.smartcampus.webclient.ShallowEdge;
+import com.smartcampus.wifi.WifiMeasurement;
+
+public class JsonInfrastructurePositioningClient implements IInfrastructurePositioningService {
+	
+	
+	@Override
+	public boolean startMeasuringAtBoundLocation(String clientMac, int buildingId, int vertexId)
+    {		    	
+    	//String url = ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI + "StartMeasuringAtBoundLocation?clientMac=" + clientMac;
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("StartMeasuringAtBoundLocation");	    	
+    	sb.append("?");
+    	sb.append("clientMac='").append(clientMac).append("'");
+    	sb.append("&buildingId=").append(buildingId);
+    	sb.append("&vertexId=").append(vertexId);
+    	String url = sb.toString();
+    	
+    	String jsonResponse = null;
+    	try
+    	{
+    		jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+    	}
+    	catch (Exception ex)
+    	{
+    		return false;
+    	}
+    	
+    	//TODO: Inspect jsonResponse
+		return true;	           	
+    }
+
+	@Override
+	public boolean startMeasuringAtUnboundLocation(String clientMac,
+			int buildingId, double lat, double lon, int alt) {
+		
+		final int E6 = 1000000; //due to potential problem with service using '.'
+		int latE6 = (int)(lat * E6);
+		int lonE6 = (int)(lon * E6);
+		StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("StartMeasuringAtUnboundLocation");	    	
+    	sb.append("?");
+    	sb.append("clientMac='").append(clientMac).append("'");
+    	sb.append("&buildingId=").append(buildingId);
+    	sb.append("&latE6=").append(latE6);
+    	sb.append("&lonE6=").append(lonE6);
+    	sb.append("&alt=").append(alt);
+    	String url = sb.toString();
+    	
+    	String jsonResponse = null;
+    	try
+    	{
+    		jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+    	}
+    	catch (Exception ex)
+    	{
+    		return false;
+    	}
+    	
+    	//TODO: Inspect jsonResponse
+		return true;	      
+	}
+
+	@Override
+	public boolean stopMeasuring(String clientMac) {
+		
+		StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("StopMeasuring");
+    	sb.append("?");
+    	sb.append("clientMac='").append(clientMac).append("'");
+    	String url = sb.toString();
+    	
+    	String jsonResponse = null;
+    	try
+    	{
+    		jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+    	}
+    	catch (Exception ex)
+    	{
+    		return false;
+    	}
+    	
+    	//TODO: Inspect jsonResponse
+		return true;	
+	}
+
+	@Override
+	public boolean startWifiPositioning(String clientMac) {
+		StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("StartWifiPositioning");
+    	sb.append("?");
+    	sb.append("clientMac='").append(clientMac).append("'");
+    	String url = sb.toString();
+    	
+    	String jsonResponse = null;
+    	try
+    	{
+    		jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+    	}
+    	catch (Exception ex)
+    	{
+    		return false;
+    	}
+    	
+    	//TODO: Inspect jsonResponse
+		return true;
+	}
+
+	@Override
+	public boolean stopWifiPositioning(String clientMac) {
+		StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("StopWifiPositioning");
+    	sb.append("?");
+    	sb.append("clientMac='").append(clientMac).append("'");
+    	String url = sb.toString();
+    	
+    	String jsonResponse = null;
+    	try
+    	{
+    		jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+    	}
+    	catch (Exception ex)
+    	{
+    		return false;
+    	}
+    	
+    	//TODO: Inspect jsonResponse
+		return true;
+	}
+
+	@Override
+	public boolean saveMeasurement(String clientMac) {
+		StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("SaveMeasurement");
+    	sb.append("?");
+    	sb.append("clientMac='").append(clientMac).append("'");
+    	String url = sb.toString();
+    	
+    	String jsonResponse = null;
+    	try
+    	{
+    		jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+    	}
+    	catch (Exception ex)
+    	{
+    		return false;
+    	}
+    	
+    	//TODO: Inspect jsonResponse
+		return true;
+	}
+	
+	@Override
+	public InfrastructurePositionEstimate getPosition(String clientMac)
+    {
+		if (clientMac == null)
+			throw new IllegalArgumentException("clientMac must not be null");
+		
+		InfrastructurePositionEstimate res = new InfrastructurePositionEstimate();
+		
+		//Build the url
+		StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("GetPosition");
+    	sb.append("?");
+    	sb.append("clientMac='").append(clientMac).append("'");
+    	String url = sb.toString();
+    	String jsonResponse;
+	    
+    	//send the request
+    	try
+	    {
+	    	jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+	    }
+    	catch (Exception ex) 
+    	{
+    		return null;
+    	}  	
+		
+    	//parse the response
+    	try
+    	{
+	    	JSONObject root = new JSONObject(jsonResponse);
+	    	JSONObject obj = root.getJSONObject("d");
+	    	res.setId(obj.getInt("ID"));
+	    	res.setBuildingId(obj.getInt("Building_ID"));
+	    	res.setVertexId(obj.getInt("VertexID"));
+	    	res.setLatitude(obj.getDouble("Latitude"));
+	    	res.setLongitude(obj.getDouble("Longitude"));
+	    	res.setAltitude(obj.getDouble("Altitude"));
+	    	res.setProvider(obj.getString("Provider"));
+	    	String strDate = obj.getString("Time").substring(6, 19);
+	    	res.setTime(Long.parseLong(strDate));
+	    	res.setAccuracy(obj.getDouble("Accuracy"));
+	    	res.setSpeed(obj.getDouble("Speed"));
+	    	res.setBearing(obj.getDouble("Bearing"));
+	    	res.setHasAccuracy(obj.getBoolean("HasAccuracy"));
+	    	res.setHasSpeed(obj.getBoolean("HasSpeed"));
+	    	res.setHasBearing(obj.getBoolean("HasBearing"));
+    	}
+    	catch (org.json.JSONException ex)
+    	{
+    		return null;
+    	}		
+	        
+	    return res;  	
+    	  	
+    }
+
+	@Override
+	public InfrastructurePositionEstimate testGetRandomPosition(String clientMac) {
+		if (clientMac == null)
+			throw new IllegalArgumentException("clientMac must not be null");
+		
+		InfrastructurePositionEstimate res = new InfrastructurePositionEstimate();
+		    	
+		StringBuilder sb = new StringBuilder();
+    	sb.append(ConnectionInfo.SMARTCAMPUS_SNIFFER_SERVICE_URI);
+    	sb.append("TestGetRandomPosition");
+    	sb.append("?");
+    	int randomBuildingId = 16;
+    	sb.append("buildingId=").append(randomBuildingId);
+    	String url = sb.toString();
+    	String jsonResponse;
+    	try
+    	{
+    		jsonResponse = JsonWebClient.OpenHttpConnection(url); 
+    	}
+    	catch (Exception ex)
+    	{
+    		return null;
+    	}
+    	try
+    	{
+	    	JSONObject root = new JSONObject(jsonResponse);
+	    	JSONObject obj = root.getJSONObject("d");
+	    	res.setId(obj.getInt("ID"));
+	    	res.setBuildingId(obj.getInt("Building_ID"));
+	    	res.setVertexId(obj.getInt("VertexID"));
+	    	res.setLatitude(obj.getDouble("Latitude"));
+	    	res.setLongitude(obj.getDouble("Longitude"));
+	    	res.setAltitude(obj.getDouble("Altitude"));
+	    	res.setProvider(obj.getString("Provider"));
+	    	String strDate = obj.getString("Time").substring(6, 19);
+	    	res.setTime(Long.parseLong(strDate));
+	    	res.setAccuracy(obj.getDouble("Accuracy"));
+	    	res.setSpeed(obj.getDouble("Speed"));
+	    	res.setBearing(obj.getDouble("Bearing"));
+	    	res.setHasAccuracy(obj.getBoolean("HasAccuracy"));
+	    	res.setHasSpeed(obj.getBoolean("HasSpeed"));
+	    	res.setHasBearing(obj.getBoolean("HasBearing"));
+    	}
+    	catch (org.json.JSONException ex)
+    	{
+    		return null;
+    	}		
+        
+        return res;  	
+    	  	
+	}
+}

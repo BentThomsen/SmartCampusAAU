@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="1b57f7a0-ebdc-4b1f-add6-67b55e6c5292" xmlns="urn:schemas-microsoft-com:xml-dataservicemap">
+  <MetadataSources>
+    <MetadataSource Address="http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.edmx" MetadataType="Edmx" ID="62121b94-53bf-466a-b8ca-54d4831db550" SourceId="1" SourceUrl="http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/" />
+  </Metadata>
+  <Extensions />
+  <Parameters>
+    <Parameter Name="ClientAssemblyReference" Value="C:\Program Files\Microsoft SDKs\Microsoft Data Framework\Phone\v7.1\bin\System.Data.Services.Client.dll" />
+    <Parameter Name="UseDataServiceCollection" Value="true" />
+    <Parameter Name="Version" Value="2.0" />
+  </Parameters>
+</ReferenceGroup>

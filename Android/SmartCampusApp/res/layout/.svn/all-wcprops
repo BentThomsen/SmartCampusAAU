@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout
+END
+offline_choose_building_row.xml
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/offline_choose_building_row.xml
+END
+map.xml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/map.xml
+END
+url_popup.xml
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/url_popup.xml
+END
+about_screen.xml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/about_screen.xml
+END
+search_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/search_dialog.xml
+END
+balloon_overlay.xml
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/balloon_overlay.xml
+END
+splash_screen.xml
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/splash_screen.xml
+END
+offline_choose_from_list.xml
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/offline_choose_from_list.xml
+END
+offline_edit_symbolic_location.xml
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/offline_edit_symbolic_location.xml
+END
+offline_wifi_scan.xml
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/offline_wifi_scan.xml
+END
+offline_edit_building.xml
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/offline_edit_building.xml
+END
+web_map.xml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/web_map.xml
+END
+offline_edit_floor.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/offline_edit_floor.xml
+END
+online_symbolic_web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/online_symbolic_web.xml
+END
+list_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/list_item.xml
+END
+set_tracking.xml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/cs/Users/rhansen/!svn/ver/46/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/set_tracking.xml
+END
+offline_edit_graph.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/layout/offline_edit_graph.xml
+END

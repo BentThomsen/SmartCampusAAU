@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel
+END
+AbsoluteLocation.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/AbsoluteLocation.java
+END
+PixelLocation.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/PixelLocation.java
+END
+Abstract3DLocation.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/Abstract3DLocation.java
+END
+SymbolicLocation.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/SymbolicLocation.java
+END
+AggregateLocation.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/AggregateLocation.java
+END
+Building.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/Building.java
+END
+Building_Floor.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/Building_Floor.java
+END
+RelativeLocation.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/indoormodel/RelativeLocation.java
+END

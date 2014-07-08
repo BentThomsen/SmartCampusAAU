@@ -1,0 +1,61 @@
+package com.smartcampus.wifi;
+
+import android.net.wifi.ScanResult;
+
+/**
+ * The MacInfo is a watered down version of Android's ScanResult class.
+ * Used to carry additional info about an access point (mac address, i.e., BSSID)
+ * and service set identifier (ssid). 
+ * @author admin
+ *
+ */
+public class MacInfo {
+	
+	private String mMac; //aka BSSID
+	private String mSSID; //aka network name
+	
+	private static final String VALUE_NOT_SUPPLIED = "Value not supplied";
+	
+	public MacInfo()
+	{
+		initialize(VALUE_NOT_SUPPLIED, VALUE_NOT_SUPPLIED);
+	}
+	
+	public MacInfo(ScanResult androidScanResult)
+	{
+		this.mMac = androidScanResult.BSSID;
+		this.mSSID = androidScanResult.SSID;
+	}
+	
+	/*
+	public MacInfo(String mac, String ssid)
+	{
+		initialize(ssid, mac);
+	}
+	*/
+	
+	public String getBSSID()
+	{
+		return mMac;
+	}
+		
+	public String getSSID()
+	{
+		return mSSID;
+	}
+	private void initialize(String ssid, String mac)
+	{
+		this.mSSID = ssid;
+		this.mMac = mac;
+		//ready for further properties if we so desire
+	}
+	
+	public void setBSSID(String bssid)
+	{
+		this.mMac = bssid;
+	}
+	public void setSSID(String ssid)
+	{
+		this.mSSID = ssid;
+	}
+}

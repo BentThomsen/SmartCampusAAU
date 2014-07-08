@@ -1,0 +1,264 @@
+/*
+Copyright (c) 2014, Aalborg University
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+package com.smartcampus.android.location.wifi.test;
+
+import java.util.ArrayList;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import com.smartcampus.indoormodel.AbsoluteLocation;
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.wifi.WifiMeasurement;
+import com.smartcampus.android.location.wifi.*;
+import com.smartcampus.baselogic.DistanceMeasurements;
+
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
+public class AlgorithmNNSSTest extends TestCase {
+
+	private WifiMeasurement online;
+	private Vertex
+		v_identical, v_minus15, v_minus30, v_plus15, v_plus30,
+		v_closeSkew, v_identicalButMissingMac, v_identicalButMissingTwoMacs,
+		v_largeDiff, v_hlf;
+	
+	private List<Vertex> offlineVertices = new ArrayList<Vertex>();
+	
+	public AlgorithmNNSSTest() {
+		super();
+	}
+	
+	@Override
+	public void setUp()
+	{
+		final String mac1 = "mac1";
+		final String mac2 = "mac2";
+		final String mac3 = "mac3";
+		final String mac4 = "mac4";
+		
+		online = new WifiMeasurement();		
+		online.addValue(mac1, -40);
+		online.addValue(mac2, -50);
+		online.addValue(mac3, -60);
+		online.addValue(mac4, -70);
+		
+		v_identical = new Vertex(290, new AbsoluteLocation(1, 2, 0));
+		WifiMeasurement offline1 = new WifiMeasurement();		
+		//This measurement is identical to the online meas.
+		offline1.addValue(mac1, -40);
+		offline1.addValue(mac2, -50);
+		offline1.addValue(mac3, -60);
+		offline1.addValue(mac4, -70);
+		v_identical.addFingerprint(offline1);	
+		offlineVertices.add(v_identical);
+				
+		v_minus30 = new Vertex(291, new AbsoluteLocation(2, 3, 0));
+		WifiMeasurement offline2 = new WifiMeasurement();		
+		//This measurement is off by a total of -40, but has the same ratio as the online meas.
+		offline2.addValue(mac1, -30);
+		offline2.addValue(mac2, -40);
+		offline2.addValue(mac3, -50);
+		offline2.addValue(mac4, -60);
+		v_minus30.addFingerprint(offline2);
+		offlineVertices.add(v_minus30);
+		
+		v_plus30 = new Vertex(292, new AbsoluteLocation(3, 4, 1));
+		WifiMeasurement offline3 = new WifiMeasurement();		
+		//This measurement is off by a total of 40, but has the same ratio as the online meas.
+		offline3.addValue(mac1, -50);
+		offline3.addValue(mac2, -60);
+		offline3.addValue(mac3, -70);
+		offline3.addValue(mac4, -80);
+		v_plus30.addFingerprint(offline3);		
+		offlineVertices.add(v_plus30);
+		
+		v_closeSkew = new Vertex(293, new AbsoluteLocation(4, 5, 1));
+		WifiMeasurement offline4 = new WifiMeasurement();	
+		//This measurement is off by a total of 8 - so pretty damn close
+		//However, the ratio is "skewed"
+		offline4.addValue(mac1, -42);
+		offline4.addValue(mac2, -48);
+		offline4.addValue(mac3, -62);
+		offline4.addValue(mac4, -68);
+		v_closeSkew.addFingerprint(offline4);
+		offlineVertices.add(v_closeSkew);
+		
+		v_identicalButMissingMac = new Vertex(294, new AbsoluteLocation(5, 6, 0));
+		WifiMeasurement offline5 = new WifiMeasurement();	
+		//This measurement is identical to the online measurement, but missing one ap
+		offline5.addValue(mac1, -40);
+		offline5.addValue(mac2, -50);
+		offline5.addValue(mac3, -60);
+		v_identicalButMissingMac.addFingerprint(offline5);
+		offlineVertices.add(v_identicalButMissingMac);
+		
+		v_identicalButMissingTwoMacs = new Vertex(295, new AbsoluteLocation(6, 7, 1));
+		WifiMeasurement offline8 = new WifiMeasurement();	
+		//This measurement is identical to the online measurement, but missing two aps
+		offline8.addValue(mac1, -40);
+		offline8.addValue(mac2, -50);
+		v_identicalButMissingTwoMacs.addFingerprint(offline8);
+		offlineVertices.add(v_identicalButMissingTwoMacs);
+		
+		v_minus15 = new Vertex(296, new AbsoluteLocation(7, 8, 0));
+		WifiMeasurement offline6 = new WifiMeasurement();		
+		//This measurement is off by -15, but has the same ratio as the online meas.
+		offline6.addValue(mac1, -35);
+		offline6.addValue(mac2, -45);
+		offline6.addValue(mac3, -55);
+		offline6.addValue(mac4, -65);
+		v_minus15.addFingerprint(offline6);
+		offlineVertices.add(v_minus15);
+		
+		v_plus15 = new Vertex(297, new AbsoluteLocation(8, 9, 1));
+		WifiMeasurement offline7 = new WifiMeasurement();		
+		//This measurement is off by -15, but has the same ratio as the online meas.
+		offline7.addValue(mac1, -45);
+		offline7.addValue(mac2, -55);
+		offline7.addValue(mac3, -65);
+		offline7.addValue(mac4, -75);
+		v_plus15.addFingerprint(offline7);
+		offlineVertices.add(v_plus15);
+		
+		v_largeDiff = new Vertex(298, new AbsoluteLocation(9, 10, 0));
+		WifiMeasurement offline9 = new WifiMeasurement();		
+		//This measurement is off by a total of 40, but has the same ratio as the online meas.
+		offline9.addValue(mac1, -10);
+		offline9.addValue(mac2, -50);
+		offline9.addValue(mac3, -100);
+		offline9.addValue(mac4, -150);
+		v_largeDiff.addFingerprint(offline9);	
+		offlineVertices.add(v_largeDiff);
+		
+		v_hlf = new Vertex(299, new AbsoluteLocation(10, 11, 1));
+		WifiMeasurement offline10 = new WifiMeasurement();		
+		//This measurement is off by a total of 40, but has the same ratio as the online meas.
+		offline10.addValue(mac1, -82);
+		offline10.addValue(mac2, -62);
+		offline10.addValue(mac3, -85);
+		offline10.addValue(mac4, -100);
+		v_hlf.addFingerprint(offline10);	
+		offlineVertices.add(v_hlf);
+		
+	}
+	
+	public void testCompare() {
+		AlgorithmNNSS alg = new AlgorithmNNSS();
+		EstimateResult res = alg.compare(offlineVertices, online);
+		Assert.assertTrue(res != null);
+	}
+
+	public void testDistance()
+	{
+		AbsoluteLocation loc1 = new AbsoluteLocation(57.012408,9.990917, 0);
+		AbsoluteLocation loc2 = new AbsoluteLocation(57.012413,9.991038, 0);
+		AbsoluteLocation loc3 = new AbsoluteLocation(57.012376,9.991038, 0);
+		double dist1 = Math.ceil(DistanceMeasurements.CalculateMoveddistanceInMeters(loc1.getLatitude(), loc1.getLongitude(), loc2.getLatitude(), loc2.getLongitude()));
+		double dist2 = Math.ceil(DistanceMeasurements.CalculateMoveddistanceInMeters(loc2.getLatitude(), loc2.getLongitude(), loc3.getLatitude(), loc3.getLongitude()));
+		Assert.assertTrue(dist1 > dist2);
+	}
+	
+	public void testBCS()
+	{
+		AbsoluteLocation loc1 = new AbsoluteLocation(57.012408,9.990917, 0);
+		AbsoluteLocation loc2 = new AbsoluteLocation(57.012413,9.991038, 0);
+		AbsoluteLocation loc3 = new AbsoluteLocation(57.012376,9.991038, 0);
+		AbsoluteLocation loc4 = new AbsoluteLocation(57.01222,9.990912, 0);
+		AbsoluteLocation loc5 = new AbsoluteLocation(57.012029,9.991695, 0);
+		AbsoluteLocation nonLoc1 = new AbsoluteLocation(1, 2, 3);
+		AbsoluteLocation nonLoc2 = new AbsoluteLocation(1, 2, 3);
+		AbsoluteLocation nonLoc3 = new AbsoluteLocation(1, 2, 3);
+		Vertex v1 = new Vertex(1, loc1);
+		Vertex v2 = new Vertex(2, loc2);
+		Vertex v3 = new Vertex(3, loc3);
+		Vertex v4 = new Vertex(4, loc4);
+		Vertex v5 = new Vertex(5, loc5);
+		Vertex nonV1 = new Vertex(6, nonLoc1);
+		Vertex nonV2 = new Vertex(7, nonLoc2);
+		Vertex nonV3 = new Vertex(8, nonLoc3);
+		
+		BCS bcs = new BCS(4);
+		bcs.add(nonV1, 10);
+		bcs.add(v1, 1);
+		bcs.add(v2, 2);
+		bcs.add(nonV2, 10.5);
+		bcs.add(v3, 3);
+		bcs.add(v4, 4);
+		bcs.add(v5, 5);
+		bcs.add(nonV3, 11);
+		
+		Collection<Vertex> res = bcs.getAll().values();
+		boolean containsValid = res.contains(v1) && res.contains(v2) && res.contains(v3) && res.contains(v4);
+		boolean notContainsInvalid = !res.contains(nonV1) && !res.contains(nonV2) && !res.contains(nonV3);
+				
+		double d1 = bcs.getAvgDist();
+		double d2 = bcs.getAvgDistanceToNthHighest(3);
+		double d3 = bcs.getDistanceToNthHighest(3);
+		double d4 = bcs.getMaxDistance();
+		boolean dummyDistanceCheck = d1 > 0 && d2 > 0 && d3 > 0 && d4 > 0;
+		Assert.assertTrue(dummyDistanceCheck && containsValid && notContainsInvalid);
+	}
+	
+	public void testGetStrongestApMeasurement()
+	{
+		WifiMeasurement meas = new WifiMeasurement();
+		meas.addValue("mac83", -83);
+		meas.addValue("mac84", -84);
+		meas.addValue("mac88", -88);
+		meas.addValue("mac89", -89);
+		meas.addValue("mac81", -81);
+		meas.addValue("mac85", -85);
+		meas.addValue("mac86", -86);
+		meas.addValue("mac87", -87);
+		meas.addValue("mac82", -82);
+					
+		WifiMeasurement meas2 = AlgorithmNNSS.getNStrongestAPMeasurement(meas, 7);
+		Set<String> keys = meas2.getMACs();
+		boolean expected =
+			keys.contains("mac81") && keys.contains("mac82") &&
+			!keys.contains("mac89") && !keys.contains("mac88") && !keys.contains("87");
+		Assert.assertTrue(expected);
+	}	
+	
+	public void testDistanceMeasurements()
+	{
+		//1:    57.012303,9.99056
+		//2:	57.012306,9.990662
+		//3:	57.012309,9.9907
+		//4:	57.012313,9.99081
+		double lat1 = 57.012303;
+		double lon1 = 9.99056;
+		double lat2 = 57.012306;
+		double lon2 = 9.990662;
+		double dist = DistanceMeasurements.CalculateMoveddistanceInMeters(lat1, lon1, lat2, lon2);
+		Assert.assertTrue(dist > 0);
+	}
+}

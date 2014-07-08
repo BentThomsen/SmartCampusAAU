@@ -1,0 +1,43 @@
+package com.smartcampus.android.ui.maps.online;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.smartcampus.indoormodel.AbsoluteLocation;
+import com.smartcampus.indoormodel.graph.Edge;
+import com.smartcampus.indoormodel.graph.Vertex;
+
+public class RouteOverlay {
+
+	//private LinkedList<AbsoluteLocation> route;
+	private HashMap<Integer, List<Edge>> edges;	
+	
+	//NOTE: This is crap performance-wise!!!
+	public RouteOverlay(LinkedList<AbsoluteLocation> route) {
+		//this.route = route;
+		edges = new HashMap<Integer, List<Edge>>();
+		Vertex origin, destination;
+		for (int i = 0; i < route.size() - 1; i++)
+		{
+			int curFloor = (int) route.get(i).getAltitude();
+			if (!edges.containsKey(curFloor))
+			{
+				edges.put(curFloor, new ArrayList<Edge>());				
+			}
+			
+			origin = new Vertex(-2, route.get(i));
+			destination = new Vertex(-1, route.get(i + 1));
+			
+			edges.get(curFloor).add(new Edge(origin, destination));
+		}
+	}	
+	
+	public List<Edge> getEdges(int floor)
+	{
+		return edges.get(floor);
+	}
+	
+	
+}

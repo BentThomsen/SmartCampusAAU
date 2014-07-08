@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" additionalparam=" -classpath C:\Program Files\Android\android-sdk\platforms\android-7\android.jar" author="true" classpath="C:\Program Files\Restlet Framework\Edition Android\2.0.8\lib\org.restlet.ext.odata.jar;C:\Program Files\Restlet Framework\Edition Android\2.0.8\lib\org.restlet.ext.xml.jar;C:\Program Files\Restlet Framework\Edition Android\2.0.8\lib\org.restlet.ext.atom.jar;libs/android-support-v4.jar;C:\Program Files\Restlet Framework\Edition Android\2.0.8\lib\org.restlet.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="true" notree="false" packagenames="com.readystatesoftware.mapviewballoons,com.smartcampus.indoormodel.graph,com.smartcampus,com.smartcampus.android.ui.wifi,com.smartcampus.businesslogic,com.smartcampus.wifi,com.smartcampus.android.ui.web,com.smartcampus.android.navigation,com.smartcampus.android.webclient.odata,com.smartcampus.indoormodel,com.smartcampus.android.ui,com.smartcampus.wifi.locationprovider,com.smartcampus.android.ui.configs,com.smartcampus.android.ui.custom,com.smartcampus.network,com.smartcampus.android.ui.graph,com.smartcampus.android.ui.maps,com.smartcampus.webclient,com.smartcampus.android.wifi,com.smartcampus.baselogic,com.smartcampus.android.webclient.odata.model" source="1.7" sourcepath="gen;src;C:\Users\admin\Desktop\eclipse workspace\android-mapviewballoons\src" splitindex="true" use="true" version="true">
+            <link href="file:/C:/Users/admin/Desktop/SmartCampus/doc/"/>
+            <link href="file:/C:/Program Files/Android/android-sdk/docs/reference"/>
+            <link href="file:/C:/PROGRA~1/Android/android-sdk/add-ons/addon_google_apis_google_inc_7/docs/reference"/>
+        </javadoc>
+    </target>
+</project>

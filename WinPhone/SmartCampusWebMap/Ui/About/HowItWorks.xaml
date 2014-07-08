@@ -1,0 +1,66 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="SmartCampusWebMap.Ui.About.HowItWorks"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock x:Name="ApplicationTitle" Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/> 
+            <!--<TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneFontSizeExtraLarge}"/> -->
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="scrollViewer1" VerticalAlignment="Stretch" Width="Auto">
+                <StackPanel Height="Auto" Name="stackPanel1" Width="Auto" VerticalAlignment="Top">
+                    <TextBlock Height="30" Name="aboutHeaderTextblock" Text="About" FontWeight="Bold" />
+                    <TextBlock Height="Auto" Name="aboutTextblock" Text="This app has been developed at the Department of Computer Science, Aalborg University, as part of the SmartCampusAAU project, funded by The European Regional Development Fond." TextWrapping="Wrap" />
+                    <TextBlock Height="30" Name="textBlock6" Text="" />
+                    <TextBlock Height="Auto" Name="aauWebsiteTextblock" Text="The SmartCampusAAU web site (http://smartcampus.cs.aau.dk) contains further information, including background information on the Wi-Fi positioning technique (infrastructure-based positioning), tutorials on how to use this app and instructions on how to use the SmartCampusAAU positioning library in your own app. " TextWrapping="Wrap" />
+                    <TextBlock Height="30" Name="textBlock4" Text="" />
+                    <TextBlock Height="30" Name="contactHeaderTextblock" Text="Contact" FontWeight="Bold" />
+                    <TextBlock Height="Auto" Name="contactTextblock" Text="To contact us, please visit http://smartcampus.cs.aau.dk/contact.html" TextWrapping="Wrap" />
+                    <TextBlock Height="30" Name="textBlock7" Text="" />
+                    <TextBlock FontWeight="Bold" Height="30" Name="privacyHeaderTextblock" Text="Privacy" />
+                    <TextBlock Height="Auto" Name="privacyTextblock" Text="GPS positioning is done by using the Microsoft Location Service API." TextWrapping="Wrap" />
+                    <TextBlock Height="30" Name="blankTextbox" Text="" />
+                    <TextBlock Height="Auto" Name="wifiTextblock1" Text="Wi-Fi positioning is done by using Wi-Fi infrastructure-based positioning (see the SmartCampusAAU homepage for details). " TextWrapping="Wrap" />
+                    <TextBlock Height="Auto" Name="wifiTextblock2" Text="Infrastructure-based positioning first of all requires an infrastructure of access points that is able to register the signal strength from nearby wireless clients (identified by their mac address)." TextWrapping="Wrap" />
+                    <TextBlock Height="Auto" Name="wifiTextblock3" Text="Positioning is then done in the following way: Clients that wishes to have their position inferred, send their mac address to the SmartCampusAAU backend. If a Wi-Fi infrastructure has observed the same mac address, the SmartCampusAAU backend computes a position estimate and returns it to the client." TextWrapping="Wrap" />
+                    <TextBlock Height="30" Name="blankTextbox2" Text="" FontStyle="Italic" />
+                    <TextBlock Height="Auto" Name="wifiTextblock4" Text="SmartCampusAAU does not store any information about a client's location or mac address. The mac address (which must be manually entered) is only stored on the app." TextWrapping="Wrap" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+ 
+    <!--Sample code showing usage of ApplicationBar-->
+    <!--<phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>-->
+
+</phone:PhoneApplicationPage>

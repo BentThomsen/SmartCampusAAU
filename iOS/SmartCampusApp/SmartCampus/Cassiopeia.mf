@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<building>
+  <name>Cassiopeia</name>
+  <alternative-names>
+    <name>Institut for Datalogi</name>
+    <name>Aalborg Universitets Institut for Datalogi</name>
+  </alternative-names>
+  <addresses>
+    <address>
+      <street>Selma Lagerlofs Vej</street>
+      <number>300</number>
+      <zip>9220</zip>
+      <city>Aalborg</city>
+      <country>Denmark</country>
+    </address>
+  </addresses>
+  <location lat="57.01177777777777" lon="9.990430555555555" alt="0.0"/>
+  <direction-of-north x="-0.026185921569187" y="1.0" z="0.0"/>
+  <model-units length-unit="millimeters"/>
+  <graphs>
+    <graph path="Cassiopeia.gml"/>
+  </graphs>
+</building>
+
+

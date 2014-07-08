@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+    	android:title="Measure" 
+    	android:id="@+id/measure" 
+    	android:icon="@drawable/ic_menu_measure">
+   	</item>
+   	<item 
+   		android:title="Edit Graph" 
+   		android:id="@+id/edit_graph" 
+   		android:icon="@drawable/ic_menu_edit_graph">
+   	</item>
+    <item 
+    	android:id="@+id/floor_changer_offline" 
+    	android:icon="@drawable/ic_menu_change_floor" 
+    	android:title="Change Floor">
+   	</item>
+   	<item 
+   		android:id="@+id/what_is_here_offline" 
+   		android:title="What's Nearby?" 
+   		android:icon="@drawable/ic_menu_nearby">
+	</item>
+	<item 
+		android:icon="@drawable/ic_dpad" 
+		android:id="@+id/enable_dpad" 
+		android:title="Enable D-pad">
+	</item>	
+    <item 
+    	android:icon="@drawable/ic_menu_on" 
+    	android:id="@+id/back_to_online" 
+    	android:title="Online Mode">
+    </item>    
+</menu>

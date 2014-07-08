@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0 }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
+<script type="text/javascript">
+
+	var map;
+	var marker;
+	var floor = "l3";
+	var maptiler;
+
+	function getTypes(){
+		return [{title:'mad'},{title:'tøj'}];
+	}
+
+	function hello(t){
+		marker = new google.maps.Marker({
+			position: new google.maps.LatLng(t.lat,t.lng),
+			map: map,
+			title:t.title
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+			window.JSInterface.doEchoTest(t);
+		});
+	}
+
+	function changeFloor(k){
+		floor = k.level;
+		map.overlayMapTypes.removeAt(0, maptiler);
+		map.overlayMapTypes.insertAt(0, maptiler);
+	}
+  
+	function showLocations(locations) {
+		for (i = 0; i < locations.length; i++) {
+			loc = locations[i];
+			m = new google.maps.Marker({
+				position: new google.maps.LatLng(loc.lat,loc.lng),
+				map: map,
+				title:"Hello World!"
+			});
+		}
+	}
+
+	function initialize() {
+
+		var frh = new google.maps.LatLng(57.437555,10.534027);
+
+		var myOptions = {
+			zoom: 18,
+			center: frh,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			streetViewControl: false
+		};
+
+		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+        maptiler = new google.maps.ImageMapType({
+			getTileUrl: function(coord, zoom) {
+				var url = "http://foliastorage.s3.amazonaws.com/tiles/indoor/"+floor+"/z" + zoom + "/x" +coord.x+ "/y" + coord.y + ".png";
+				return url;
+			},
+			tileSize: new google.maps.Size(256, 256),
+			isPng: true
+		});
+
+		map.overlayMapTypes.insertAt(0, maptiler);
+
+		marker = new google.maps.Marker({
+			position: frh,
+			map: map,
+			title:"Hello World!"
+		});
+
+		google.maps.event.addListener(marker, 'click', function() {
+			window.JSInterface.doEchoTest("Hej Rene");
+		});
+
+    }
+    </script>
+
+</head>
+
+
+
+<body onload="initialize();">
+
+<div id="map_canvas" style="width:100%; height:100%"></div>
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<WebView
+	android:id="@+id/web_map"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" />
+</LinearLayout>
+ -->
+ 
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/web_map_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/rel_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+   
+		<WebView
+			android:id="@+id/web_map"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+	
+	</RelativeLayout>
+	
+	<RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+        <ImageButton 
+	    	android:layout_height="wrap_content" 
+	    	android:layout_width="wrap_content" 
+	    	android:id="@+id/trackPositionButton" 
+	    	android:src="@drawable/foliapin" 
+	    	android:layout_alignParentTop="true" 
+	    	android:layout_alignParentLeft="true"	    	
+	    	android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/dpad_downT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="27dp"
+            android:src="@drawable/dpad_down_arrow_default"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/dpad_leftT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="32dp"
+            android:layout_marginRight="53dp"
+            android:src="@drawable/dpad_left_arrow_default"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/dpad_upT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="62dp"
+            android:layout_marginRight="28dp"
+            android:src="@drawable/dpad_up_arrow_default"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/dpad_rightT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="32dp"
+            android:layout_marginRight="2dp"
+            android:src="@drawable/dpad_right_arrow_default"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</RelativeLayout>
+  

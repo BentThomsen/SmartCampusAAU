@@ -1,0 +1,19 @@
+package com.smartcampus.webclient.snifferbackend;
+
+public interface IInfrastructurePositioningService {
+	/**
+	 * Indicates to the sniffer backend to start creating a measurement for the client with the specified mac address.
+	 * @param clientMac
+	 * @param buildingId
+	 * @param vertexId
+	 * @return
+	 */
+	boolean startMeasuringAtBoundLocation(String clientMac, int buildingId, int vertexId);
+	boolean startMeasuringAtUnboundLocation(String clientMac, int buildingId, double lat, double lon, int alt);
+	boolean stopMeasuring(String clientMac);
+	boolean saveMeasurement(String clientMac);
+	boolean startWifiPositioning(String clientMac);
+	boolean stopWifiPositioning(String clientMac);
+	InfrastructurePositionEstimate getPosition(String clientMac);
+	InfrastructurePositionEstimate testGetRandomPosition(String clientMac);
+}

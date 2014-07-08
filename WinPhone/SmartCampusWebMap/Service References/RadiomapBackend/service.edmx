@@ -1,0 +1,486 @@
+﻿<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="1.0">
+    <Schema Namespace="radiomapModel" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityType Name="AbsoluteLocation">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="latitude" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="longitude" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="altitude" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="Vertex_ID" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Vertex" Relationship="radiomapModel.FK_VertexAbsoluteLocation" FromRole="AbsoluteLocation" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="Building_Floors">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Number" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Building" Relationship="radiomapModel.FK_BuildingFloor1" FromRole="Building_Floors" ToRole="Building" />
+      </EntityType>
+      <EntityType Name="Building_GpsBounds">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="bottomleft_lat" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="bottomleft_lon" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="bottomright_lat" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="bottomright_lon" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="topright_lat" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="topright_lon" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="topleft_lat" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="topleft_lon" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <NavigationProperty Name="Building" Relationship="radiomapModel.FK_BuildingBuilding_GpsBounds" FromRole="Building_GpsBounds" ToRole="Building" />
+      </EntityType>
+      <EntityType Name="Building_MacInfos">
+        <Key>
+          <PropertyRef Name="ID" />
+          <PropertyRef Name="Mac" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="SSID" Type="Edm.String" Nullable="true" MaxLength="20" Unicode="true" FixedLength="false" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Mac" Type="Edm.String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+        <NavigationProperty Name="Building" Relationship="radiomapModel.FK_BuildingMacInfo11" FromRole="Building_MacInfos" ToRole="Building" />
+      </EntityType>
+      <EntityType Name="Building_Maps">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="url" Type="Edm.String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="bottomleft_x" Type="Edm.Int32" Nullable="true" />
+        <Property Name="bottomleft_y" Type="Edm.Int32" Nullable="true" />
+        <Property Name="bottomright_x" Type="Edm.Int32" Nullable="true" />
+        <Property Name="bottomright_y" Type="Edm.Int32" Nullable="true" />
+        <Property Name="topleft_x" Type="Edm.Int32" Nullable="true" />
+        <Property Name="topleft_y" Type="Edm.Int32" Nullable="true" />
+        <Property Name="topright_x" Type="Edm.Int32" Nullable="true" />
+        <Property Name="topright_y" Type="Edm.Int32" Nullable="true" />
+        <NavigationProperty Name="Building" Relationship="radiomapModel.FK_BuildingGraphicalMap11" FromRole="Building_Maps" ToRole="Building" />
+      </EntityType>
+      <EntityType Name="Building">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Building_Name" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        <Property Name="Ifc_Url" Type="Edm.String" Nullable="true" MaxLength="200" Unicode="true" FixedLength="false" />
+        <Property Name="Lat" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="Lon" Type="Edm.Decimal" Nullable="true" Precision="18" Scale="14" />
+        <Property Name="Country" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        <Property Name="Postal_Code" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        <Property Name="Max_Address" Type="Edm.String" Nullable="true" MaxLength="255" Unicode="true" FixedLength="false" />
+        <Property Name="Url" Type="Edm.String" Nullable="true" MaxLength="255" Unicode="true" FixedLength="false" />
+        <Property Name="Sniffer_Url" Type="Edm.String" Nullable="true" />
+        <NavigationProperty Name="Building_Floors" Relationship="radiomapModel.FK_BuildingFloor1" FromRole="Building" ToRole="Building_Floors" />
+        <NavigationProperty Name="Building_GpsBounds" Relationship="radiomapModel.FK_BuildingBuilding_GpsBounds" FromRole="Building" ToRole="Building_GpsBounds" />
+        <NavigationProperty Name="Building_MacInfos" Relationship="radiomapModel.FK_BuildingMacInfo11" FromRole="Building" ToRole="Building_MacInfos" />
+        <NavigationProperty Name="Building_Maps" Relationship="radiomapModel.FK_BuildingGraphicalMap11" FromRole="Building" ToRole="Building_Maps" />
+        <NavigationProperty Name="Edges" Relationship="radiomapModel.FK_BuildingEdge" FromRole="Building" ToRole="Edge" />
+        <NavigationProperty Name="Vertices" Relationship="radiomapModel.FK_BuildingVertex" FromRole="Building" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="Edge">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="directional" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="vertexOrigin" Type="Edm.Int32" Nullable="false" />
+        <Property Name="vertexDestination" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="is_stair" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="is_elevator" Type="Edm.Boolean" Nullable="true" />
+        <NavigationProperty Name="Building" Relationship="radiomapModel.FK_BuildingEdge" FromRole="Edge" ToRole="Building" />
+        <NavigationProperty Name="Vertices" Relationship="radiomapModel.Vertex_Edges" FromRole="Edge" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="Histogram">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="value" Type="Edm.Int32" Nullable="false" />
+        <Property Name="count" Type="Edm.Int32" Nullable="false" />
+        <Property Name="WifiMeasurement_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Mac" Type="Edm.String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+        <NavigationProperty Name="WifiMeasurement" Relationship="radiomapModel.FK_WifiMeasurementHistogram" FromRole="Histogram" ToRole="WifiMeasurement" />
+      </EntityType>
+      <EntityType Name="PixelLocation">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="x" Type="Edm.Int32" Nullable="true" />
+        <Property Name="y" Type="Edm.Int32" Nullable="true" />
+        <Property Name="z" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Vertex_ID" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Vertex" Relationship="radiomapModel.FK_VertexPixelLocation" FromRole="PixelLocation" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="RelativeLocation">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="x" Type="Edm.Int32" Nullable="true" />
+        <Property Name="y" Type="Edm.Int32" Nullable="true" />
+        <Property Name="z" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Vertex_ID" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Vertex" Relationship="radiomapModel.FK_VertexRelativeLocation" FromRole="RelativeLocation" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="SymbolicLocation">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="title" Type="Edm.String" Nullable="true" MaxLength="255" Unicode="true" FixedLength="false" />
+        <Property Name="description" Type="Edm.String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+        <Property Name="url" Type="Edm.String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+        <Property Name="Vertex_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="is_entrance" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="info_type" Type="Edm.Int32" Nullable="true" />
+        <NavigationProperty Name="Vertex" Relationship="radiomapModel.FK_VertexSymbolicLocation" FromRole="SymbolicLocation" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="Vertex">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="AbsoluteLocations" Relationship="radiomapModel.FK_VertexAbsoluteLocation" FromRole="Vertex" ToRole="AbsoluteLocation" />
+        <NavigationProperty Name="Building" Relationship="radiomapModel.FK_BuildingVertex" FromRole="Vertex" ToRole="Building" />
+        <NavigationProperty Name="PixelLocations" Relationship="radiomapModel.FK_VertexPixelLocation" FromRole="Vertex" ToRole="PixelLocation" />
+        <NavigationProperty Name="RelativeLocations" Relationship="radiomapModel.FK_VertexRelativeLocation" FromRole="Vertex" ToRole="RelativeLocation" />
+        <NavigationProperty Name="SymbolicLocations" Relationship="radiomapModel.FK_VertexSymbolicLocation" FromRole="Vertex" ToRole="SymbolicLocation" />
+        <NavigationProperty Name="WifiMeasurements" Relationship="radiomapModel.FK_VertexWifiMeasurement" FromRole="Vertex" ToRole="WifiMeasurement" />
+        <NavigationProperty Name="SnifferWifiMeasurements" Relationship="radiomapModel.FK_SnifferWifiMeasurements_Vertices" FromRole="Vertex" ToRole="SnifferWifiMeasurement" />
+        <NavigationProperty Name="Edges" Relationship="radiomapModel.Vertex_Edges" FromRole="Vertex" ToRole="Edge" />
+      </EntityType>
+      <EntityType Name="WifiMeasurement">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="meas_time_start" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="meas_time_end" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Vertex_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Is_Collective" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="Was_Collective" Type="Edm.Boolean" Nullable="true" />
+        <NavigationProperty Name="Histograms" Relationship="radiomapModel.FK_WifiMeasurementHistogram" FromRole="WifiMeasurement" ToRole="Histogram" />
+        <NavigationProperty Name="Vertex" Relationship="radiomapModel.FK_VertexWifiMeasurement" FromRole="WifiMeasurement" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="SnifferHistogram">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Mac" Type="Edm.String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+        <Property Name="value" Type="Edm.Int32" Nullable="false" />
+        <Property Name="count" Type="Edm.Int32" Nullable="false" />
+        <Property Name="WifiMeasurement_ID" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="SnifferWifiMeasurement" Relationship="radiomapModel.FK_SnifferHistograms_SnifferWifiMeasurements" FromRole="SnifferHistogram" ToRole="SnifferWifiMeasurement" />
+      </EntityType>
+      <EntityType Name="SnifferWifiMeasurement">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="meas_time_start" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="meas_time_end" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Vertex_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Is_Collective" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="Was_Collective" Type="Edm.Boolean" Nullable="true" />
+        <NavigationProperty Name="SnifferHistograms" Relationship="radiomapModel.FK_SnifferHistograms_SnifferWifiMeasurements" FromRole="SnifferWifiMeasurement" ToRole="SnifferHistogram" />
+        <NavigationProperty Name="Vertex" Relationship="radiomapModel.FK_SnifferWifiMeasurements_Vertices" FromRole="SnifferWifiMeasurement" ToRole="Vertex" />
+      </EntityType>
+      <EntityType Name="TrackedPosition">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="true" />
+        <Property Name="VertexID" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Latitude" Type="Edm.Double" Nullable="false" />
+        <Property Name="Longitude" Type="Edm.Double" Nullable="false" />
+        <Property Name="Altitude" Type="Edm.Double" Nullable="false" />
+        <Property Name="Provider" Type="Edm.String" Nullable="true" />
+        <Property Name="Time" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Accuracy" Type="Edm.Double" Nullable="true" />
+        <Property Name="Speed" Type="Edm.Double" Nullable="true" />
+        <Property Name="Bearing" Type="Edm.Double" Nullable="true" />
+        <Property Name="HasAccuracy" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="HasSpeed" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="HasBearing" Type="Edm.Boolean" Nullable="true" />
+        <Property Name="ClientID" Type="Edm.String" Nullable="true" />
+      </EntityType>
+      <Association Name="FK_VertexAbsoluteLocation">
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="1" />
+        <End Role="AbsoluteLocation" Type="radiomapModel.AbsoluteLocation" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Vertex">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="AbsoluteLocation">
+            <PropertyRef Name="Vertex_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_BuildingFloor1">
+        <End Role="Building" Type="radiomapModel.Building" Multiplicity="1" />
+        <End Role="Building_Floors" Type="radiomapModel.Building_Floors" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Building">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="Building_Floors">
+            <PropertyRef Name="Building_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_BuildingBuilding_GpsBounds">
+        <End Role="Building" Type="radiomapModel.Building" Multiplicity="1" />
+        <End Role="Building_GpsBounds" Type="radiomapModel.Building_GpsBounds" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Building">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="Building_GpsBounds">
+            <PropertyRef Name="Building_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_BuildingMacInfo11">
+        <End Role="Building" Type="radiomapModel.Building" Multiplicity="1" />
+        <End Role="Building_MacInfos" Type="radiomapModel.Building_MacInfos" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Building">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="Building_MacInfos">
+            <PropertyRef Name="Building_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_BuildingGraphicalMap11">
+        <End Role="Building" Type="radiomapModel.Building" Multiplicity="1" />
+        <End Role="Building_Maps" Type="radiomapModel.Building_Maps" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Building">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="Building_Maps">
+            <PropertyRef Name="Building_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_BuildingEdge">
+        <End Role="Building" Type="radiomapModel.Building" Multiplicity="1" />
+        <End Role="Edge" Type="radiomapModel.Edge" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Building">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="Edge">
+            <PropertyRef Name="Building_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_BuildingVertex">
+        <End Role="Building" Type="radiomapModel.Building" Multiplicity="1" />
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Building">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="Vertex">
+            <PropertyRef Name="Building_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_WifiMeasurementHistogram">
+        <End Role="WifiMeasurement" Type="radiomapModel.WifiMeasurement" Multiplicity="1" />
+        <End Role="Histogram" Type="radiomapModel.Histogram" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="WifiMeasurement">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="Histogram">
+            <PropertyRef Name="WifiMeasurement_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_VertexPixelLocation">
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="1" />
+        <End Role="PixelLocation" Type="radiomapModel.PixelLocation" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Vertex">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="PixelLocation">
+            <PropertyRef Name="Vertex_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_VertexRelativeLocation">
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="1" />
+        <End Role="RelativeLocation" Type="radiomapModel.RelativeLocation" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Vertex">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="RelativeLocation">
+            <PropertyRef Name="Vertex_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_VertexSymbolicLocation">
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="1" />
+        <End Role="SymbolicLocation" Type="radiomapModel.SymbolicLocation" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Vertex">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="SymbolicLocation">
+            <PropertyRef Name="Vertex_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_VertexWifiMeasurement">
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="1" />
+        <End Role="WifiMeasurement" Type="radiomapModel.WifiMeasurement" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Vertex">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="WifiMeasurement">
+            <PropertyRef Name="Vertex_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_SnifferHistograms_SnifferWifiMeasurements">
+        <End Role="SnifferWifiMeasurement" Type="radiomapModel.SnifferWifiMeasurement" Multiplicity="1" />
+        <End Role="SnifferHistogram" Type="radiomapModel.SnifferHistogram" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="SnifferWifiMeasurement">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="SnifferHistogram">
+            <PropertyRef Name="WifiMeasurement_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_SnifferWifiMeasurements_Vertices">
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="1" />
+        <End Role="SnifferWifiMeasurement" Type="radiomapModel.SnifferWifiMeasurement" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Vertex">
+            <PropertyRef Name="ID" />
+          </Principal>
+          <Dependent Role="SnifferWifiMeasurement">
+            <PropertyRef Name="Vertex_ID" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="Vertex_Edges">
+        <End Role="Edge" Type="radiomapModel.Edge" Multiplicity="*" />
+        <End Role="Vertex" Type="radiomapModel.Vertex" Multiplicity="*" />
+      </Association>
+    </Schema>
+    <Schema Namespace="RadioMapLocal" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityContainer Name="radiomapEntities" p7:LazyLoadingEnabled="true" m:IsDefaultEntityContainer="true" xmlns:p7="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <FunctionImport Name="GetBuildingsWithName" EntitySet="Buildings" ReturnType="Collection(radiomapModel.Building)" m:HttpMethod="GET">
+          <Parameter Name="name" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="AddToVertexGraveyard" m:HttpMethod="GET">
+          <Parameter Name="buildingId" Type="Edm.Int32" Mode="In" />
+          <Parameter Name="vertexId" Type="Edm.Int32" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="RemoveNonCollectiveMeasurements" EntitySet="Buildings" ReturnType="Collection(radiomapModel.Building)" m:HttpMethod="GET">
+          <Parameter Name="building_id" Type="Edm.Int32" Mode="In" />
+        </FunctionImport>
+        <EntitySet Name="AbsoluteLocations" EntityType="radiomapModel.AbsoluteLocation" />
+        <EntitySet Name="Building_Floors" EntityType="radiomapModel.Building_Floors" />
+        <EntitySet Name="Building_GpsBounds" EntityType="radiomapModel.Building_GpsBounds" />
+        <EntitySet Name="Building_MacInfos" EntityType="radiomapModel.Building_MacInfos" />
+        <EntitySet Name="Building_Maps" EntityType="radiomapModel.Building_Maps" />
+        <EntitySet Name="Buildings" EntityType="radiomapModel.Building" />
+        <EntitySet Name="Edges" EntityType="radiomapModel.Edge" />
+        <EntitySet Name="Histograms" EntityType="radiomapModel.Histogram" />
+        <EntitySet Name="PixelLocations" EntityType="radiomapModel.PixelLocation" />
+        <EntitySet Name="RelativeLocations" EntityType="radiomapModel.RelativeLocation" />
+        <EntitySet Name="SymbolicLocations" EntityType="radiomapModel.SymbolicLocation" />
+        <EntitySet Name="Vertices" EntityType="radiomapModel.Vertex" />
+        <EntitySet Name="WifiMeasurements" EntityType="radiomapModel.WifiMeasurement" />
+        <EntitySet Name="SnifferHistograms" EntityType="radiomapModel.SnifferHistogram" />
+        <EntitySet Name="SnifferWifiMeasurements" EntityType="radiomapModel.SnifferWifiMeasurement" />
+        <EntitySet Name="TrackedPositions" EntityType="radiomapModel.TrackedPosition" />
+        <AssociationSet Name="FK_VertexAbsoluteLocation" Association="radiomapModel.FK_VertexAbsoluteLocation">
+          <End Role="Vertex" EntitySet="Vertices" />
+          <End Role="AbsoluteLocation" EntitySet="AbsoluteLocations" />
+        </AssociationSet>
+        <AssociationSet Name="FK_BuildingFloor1" Association="radiomapModel.FK_BuildingFloor1">
+          <End Role="Building" EntitySet="Buildings" />
+          <End Role="Building_Floors" EntitySet="Building_Floors" />
+        </AssociationSet>
+        <AssociationSet Name="FK_BuildingBuilding_GpsBounds" Association="radiomapModel.FK_BuildingBuilding_GpsBounds">
+          <End Role="Building" EntitySet="Buildings" />
+          <End Role="Building_GpsBounds" EntitySet="Building_GpsBounds" />
+        </AssociationSet>
+        <AssociationSet Name="FK_BuildingMacInfo11" Association="radiomapModel.FK_BuildingMacInfo11">
+          <End Role="Building" EntitySet="Buildings" />
+          <End Role="Building_MacInfos" EntitySet="Building_MacInfos" />
+        </AssociationSet>
+        <AssociationSet Name="FK_BuildingGraphicalMap11" Association="radiomapModel.FK_BuildingGraphicalMap11">
+          <End Role="Building" EntitySet="Buildings" />
+          <End Role="Building_Maps" EntitySet="Building_Maps" />
+        </AssociationSet>
+        <AssociationSet Name="FK_BuildingEdge" Association="radiomapModel.FK_BuildingEdge">
+          <End Role="Building" EntitySet="Buildings" />
+          <End Role="Edge" EntitySet="Edges" />
+        </AssociationSet>
+        <AssociationSet Name="FK_BuildingVertex" Association="radiomapModel.FK_BuildingVertex">
+          <End Role="Building" EntitySet="Buildings" />
+          <End Role="Vertex" EntitySet="Vertices" />
+        </AssociationSet>
+        <AssociationSet Name="FK_WifiMeasurementHistogram" Association="radiomapModel.FK_WifiMeasurementHistogram">
+          <End Role="WifiMeasurement" EntitySet="WifiMeasurements" />
+          <End Role="Histogram" EntitySet="Histograms" />
+        </AssociationSet>
+        <AssociationSet Name="FK_VertexPixelLocation" Association="radiomapModel.FK_VertexPixelLocation">
+          <End Role="Vertex" EntitySet="Vertices" />
+          <End Role="PixelLocation" EntitySet="PixelLocations" />
+        </AssociationSet>
+        <AssociationSet Name="FK_VertexRelativeLocation" Association="radiomapModel.FK_VertexRelativeLocation">
+          <End Role="Vertex" EntitySet="Vertices" />
+          <End Role="RelativeLocation" EntitySet="RelativeLocations" />
+        </AssociationSet>
+        <AssociationSet Name="FK_VertexSymbolicLocation" Association="radiomapModel.FK_VertexSymbolicLocation">
+          <End Role="Vertex" EntitySet="Vertices" />
+          <End Role="SymbolicLocation" EntitySet="SymbolicLocations" />
+        </AssociationSet>
+        <AssociationSet Name="FK_VertexWifiMeasurement" Association="radiomapModel.FK_VertexWifiMeasurement">
+          <End Role="Vertex" EntitySet="Vertices" />
+          <End Role="WifiMeasurement" EntitySet="WifiMeasurements" />
+        </AssociationSet>
+        <AssociationSet Name="FK_SnifferHistograms_SnifferWifiMeasurements" Association="radiomapModel.FK_SnifferHistograms_SnifferWifiMeasurements">
+          <End Role="SnifferWifiMeasurement" EntitySet="SnifferWifiMeasurements" />
+          <End Role="SnifferHistogram" EntitySet="SnifferHistograms" />
+        </AssociationSet>
+        <AssociationSet Name="FK_SnifferWifiMeasurements_Vertices" Association="radiomapModel.FK_SnifferWifiMeasurements_Vertices">
+          <End Role="Vertex" EntitySet="Vertices" />
+          <End Role="SnifferWifiMeasurement" EntitySet="SnifferWifiMeasurements" />
+        </AssociationSet>
+        <AssociationSet Name="Vertex_Edges" Association="radiomapModel.Vertex_Edges">
+          <End Role="Edge" EntitySet="Edges" />
+          <End Role="Vertex" EntitySet="Vertices" />
+        </AssociationSet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

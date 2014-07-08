@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center" >
+  
+	<LinearLayout
+		android:orientation="vertical"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	
+	    <Button 
+	    	android:id="@+id/edit_graph_edit_links_button" 
+	    	android:text="Edit Links"
+	        android:layout_width="150px" 
+	    	android:layout_height="wrap_content"
+	        android:paddingBottom="20px" />	     
+        <Button
+	    	android:id="@+id/edit_graph_remove_node_button"
+	    	android:text="Remove Node"
+	        android:layout_width="150px" 
+	        android:layout_height="wrap_content"
+	        android:paddingTop="20px" />   	        
+        <Button
+        	android:id="@+id/edit_graph_edit_floors_button" 
+        	android:text="Edit Building Floors" 
+        	android:layout_width="150px" 
+        	android:layout_height="wrap_content" 
+        	android:paddingTop="20px" />
+        	
+        <!--     
+        <Button 
+	    	android:id="@+id/remove_link_button"
+	    	android:text="Remove Link"
+	        android:layout_width="150px" 
+	        android:layout_height="wrap_content"
+	        android:paddingTop="20px"
+	        android:paddingBottom="20px" />
+	     -->
+	</LinearLayout>
+	
+</RelativeLayout>

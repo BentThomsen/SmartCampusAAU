@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+  <item 
+    	android:title="Change Floor" 
+    	android:icon="@drawable/ic_menu_change_floor" 
+    	android:id="@+id/remove_vertex_floor_changer">
+   	</item>
+    <item 
+    	android:icon="@drawable/ic_menu_nearby" 
+    	android:title="What's Nearby?" 
+    	android:id="@+id/remove_vertex_what_is_here">
+   	</item>   
+    
+</menu>

@@ -1,0 +1,172 @@
+package com.smartcampus.android.location.wifi;
+
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.wifi.WifiMeasurement;
+
+/**
+ * This class implements the Hyberbolic Location Fingerprinting (HLF) described in
+ * "Hyperbolic Location Fingerprinting: A Calibration-Free Solution for Handling Differences in Signal Strength"
+ * The difference, in a nutshell, from the traditional NNSS algorithm is that we are using
+ * signal strength ratios between pairs of access points rather than concrete signal strength values.
+ * @author admin
+ *
+ */
+public class AlgorithmHyperNNSS implements IPositioningAlgorithm {
+	private static final double MISSING_MAC_PENALTY = 255;
+	private static final double HUNDRED = 100;
+	private BCS bcs; // = new BCS(3);
+			
+	@Override
+	public EstimateResult compare(Iterable<Vertex> vertices, WifiMeasurement measurement)
+    {
+		//If we have less than two macs, we cannot create a ratio entry. 
+		if (vertices == null || measurement == null || measurement.getNumMACs() < 2)
+			return null;
+		
+		measurement = getNStrongestAPMeasurement(measurement, 7);
+				
+		bcs = WifiPosEngine.BestCandidateSet;
+		
+        double curDist; //distance of current vertice in search space
+        EstimateResult result = new EstimateResult(null, Double.MAX_VALUE);
+        WifiMeasurement hyperMeasurement = constructHyperRepresentation(measurement);
+        WifiMeasurement hyperCurFP;        
+        for (Vertex curVertex : vertices) //sammenlign med hver Vertex
+        {
+            for (WifiMeasurement curFP : curVertex.getFingerPrints()) //sammenlign med hvert fingerprint (usually only one - otherwise use more intelligent approach)
+            {
+            	//If an offline fingerprint contains less than two macs we cannot create a HLF, so we disregard it.
+            	if (curFP.getNumMACs() < 2)
+            		continue;
+            	hyperCurFP = constructHyperRepresentation(curFP);
+                curDist = 0;
+                double tmpDist; //for inspecting the values - nothing more
+                double onlineVal, offlineVal; //holds the currents values that are compared
+                for (String mac : hyperMeasurement.getMACs()) //all APs in sample
+                {
+                	onlineVal = hyperMeasurement.getAvgDbM(mac);
+                	if (hyperCurFP.containsMac(mac))
+                    {
+                		offlineVal = hyperCurFP.getAvgDbM(mac);                        
+                    }
+                    else 
+                    {
+                    	offlineVal = getIntNlr(onlineVal, MISSING_MAC_PENALTY, MISSING_MAC_PENALTY);
+                    }
+                	tmpDist = Math.pow((onlineVal - offlineVal), 2);
+                    curDist += tmpDist;
+                }
+                
+                curDist = Math.sqrt(curDist);
+                if (curDist < result.getDistance())
+                {
+                	result.setDistance(curDist);
+                	result.setVertex(curVertex);
+                }
+                bcs.add(curVertex, curDist); //add to best candidate set - which will take care of only using the best estimates. 
+            }                
+        }
+        result.setErrorEstimate(bcs.getMaxDistance()); //bcs.getAvgDist()); //bcs.getDistanceToNthHighest(3));
+        return result;
+    }
+	
+	public static WifiMeasurement constructHyperRepresentation(WifiMeasurement measurement)
+	{
+		if (measurement == null)
+			return null;
+		
+		WifiMeasurement hyperRes = new WifiMeasurement();
+		
+		//1. Sort the macs (and find v_max. v_max MIGHT be useful instead of MISSING_MAC_PENALTY)
+		//NB!!!! Remember to use doubles. Using ints for division produces 0. 
+		double v_max = 1;
+		double cur_rssi = 1;
+		SortedSet<String> sortedMacs = new TreeSet<String>();
+		for (String mac : measurement.getMACs()) //all APs in sample
+		{
+			sortedMacs.add(mac);
+			cur_rssi = measurement.getAvgDbM(mac);
+			if (cur_rssi < v_max) //Remember, we are comparing negative numbers
+				v_max = cur_rssi;
+		}
+		v_max = Math.abs(v_max); //We are using absolute values here
+		
+		//2. Construct r(o_{i}, o_{j}) pairs
+		for (String b_i : sortedMacs)
+			for (String b_j : sortedMacs)
+			{
+				if (b_j.compareTo(b_i) <= 0)
+					continue;
+				else
+				{
+					double a1 =  Math.abs(measurement.getAvgDbM(b_i)); //o_i = (b_i, v)
+					double a2 =  Math.abs(measurement.getAvgDbM(b_j)); //o_j = (b_j, y)
+					if (a2 == 0) //just in case check
+						continue;					
+					
+					hyperRes.addValue(b_i + "_" + b_j, getIntNlr(a1, a2, MISSING_MAC_PENALTY)); //v_max					
+				}
+			}
+		
+		return hyperRes;
+	}
+	
+	/**
+	 * Get the normalized log ratio between two values (two ap avg values)
+	 * @param a1
+	 * @param a2
+	 * @param v_max
+	 * @return
+	 */
+	private static int getIntNlr(double a1, double a2, double v_max)
+	{
+		double res1 = a1 / a2;
+		double nlr1 = Math.log(res1);
+		double res2 = 1 / v_max; //MISSING_MAC_PENALTY;
+		double nlr2 = Math.log(res2);
+		double nlr = nlr1 - nlr2;
+		//our existing WifiMeasurement saves values as ints, so to use nlr as an int we multiply by 100
+		int intNlr = (int)(nlr * HUNDRED);
+		return intNlr;
+	}
+	
+	private WifiMeasurement getNStrongestAPMeasurement(WifiMeasurement measurement, int n)
+	{
+		if (measurement.getMACs().size() < n)
+			return measurement;
+	
+		TreeMap<Double, String> strongestAPs = new TreeMap<Double, String>();
+		
+		//Find the n strongest macs
+		for (String mac : measurement.getMACs()) //all APs in sample
+		{
+			double curMacVal = measurement.getAvgDbM(mac);
+		
+			//Impl. note: Check for emptiness first as lastKey() will throw NoSuchElement if empty.
+            if (strongestAPs.isEmpty() || curMacVal > strongestAPs.lastKey())
+            {
+            	//'Hack' to prevent duplicateKeyException
+            	while (strongestAPs.containsKey(curMacVal))
+                    curMacVal += 0.0001;
+            	
+            	strongestAPs.put(curMacVal, mac);
+            }            
+
+            if (strongestAPs.size() > n)
+            	strongestAPs.remove(strongestAPs.lastKey());       
+		}
+		
+		//Create new measurement containing n strongest macs
+		WifiMeasurement result = new WifiMeasurement();
+		for (double d : strongestAPs.keySet())
+		{
+			result.addValue(strongestAPs.get(d), (int)d);
+		}
+		return result;
+	}	
+}
+

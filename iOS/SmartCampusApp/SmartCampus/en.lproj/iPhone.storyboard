@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="11E53" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ai8-2v-ION">
+    <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+    </dependencies>
+    <scenes>
+        <!--Measure View Controller-->
+        <scene sceneID="eG7-IS-LBY">
+            <objects>
+                <viewController id="4x3-mX-SgD" customClass="MeasureViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7tV-s4-gJL">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="R3b-H5-1j7">
+                                <rect key="frame" x="20" y="155" width="280" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
+                                <state key="normal" title="Start Measuring">
+                                    <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="measuringTapped:" destination="4x3-mX-SgD" eventType="touchUpInside" id="3bZ-eq-IQL"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="L8Z-9v-uno">
+                                <rect key="frame" x="20" y="206" width="280" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
+                                <state key="normal" title="Save Measurement">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="saveTapped:" destination="4x3-mX-SgD" eventType="touchUpInside" id="FZb-Ge-zWJ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="J6g-vn-I8k"/>
+                    <connections>
+                        <outlet property="measuringButton" destination="R3b-H5-1j7" id="NQd-CM-nXe"/>
+                        <outlet property="saveButton" destination="L8Z-9v-uno" id="eAw-F9-JIJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="733-Bx-dgS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3948" y="1545"/>
+        </scene>
+        <!--Map Web View Controller - SmartCampus-->
+        <scene sceneID="1gb-bM-SH4">
+            <objects>
+                <viewController id="ai8-2v-ION" customClass="MapWebViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="l2f-AB-qnN">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" barStyle="blackOpaque" text="" placeholder="Search.." id="Mos-zD-WhJ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
+                            <webView contentMode="scaleToFill" id="Fud-y1-jgu" customClass="MapWebView">
+                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="blackOpaque" id="LHV-GI-pG7">
+                                <rect key="frame" x="0.0" y="416" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="DG2-3O-KvO"/>
+                                    <barButtonItem systemItem="pageCurl" id="aiz-fH-Fgu">
+                                        <connections>
+                                            <segue destination="PU9-sy-WKr" kind="modal" identifier="menu" modalTransitionStyle="partialCurl" id="mF1-cM-SXw"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="SmartCampus" id="yFw-AH-cKe"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="mapWebView" destination="Fud-y1-jgu" id="73f-Iy-lbU"/>
+                        <outlet property="searchBar" destination="Mos-zD-WhJ" id="Fvt-aQ-MvP"/>
+                        <segue destination="FWv-K9-pQw" kind="modal" identifier="measure" id="VFz-cT-HXb"/>
+                        <segue destination="3Ie-Nx-Qa1" kind="modal" identifier="nearby" id="OKc-Oc-EL4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gTK-I2-cyd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2884" y="1004"/>
+        </scene>
+        <!--Menu View Controller-->
+        <scene sceneID="4Qa-of-uJp">
+            <objects>
+                <viewController id="PU9-sy-WKr" customClass="MenuViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kF2-Xh-iEq">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fZ6-da-k85" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3500" y="966"/>
+        </scene>
+        <!--Table Picker Controller-->
+        <scene sceneID="6xq-cE-OCf">
+            <objects>
+                <tableViewController id="bHA-jU-W8Q" customClass="TablePickerController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="abj-AO-8TN">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="item" id="MCm-om-TEW">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="bHA-jU-W8Q" id="NzE-Gj-0s7"/>
+                            <outlet property="delegate" destination="bHA-jU-W8Q" id="DBO-nl-Kpq"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="Yb8-KU-RaY">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="IOK-Nh-Xms">
+                            <connections>
+                                <action selector="closeButtonTapped:" destination="bHA-jU-W8Q" id="FNZ-d0-2gf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XKv-2q-9CN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3948" y="2133"/>
+        </scene>
+        <!--Main Navigation Controller-->
+        <scene sceneID="P4W-mh-bKi">
+            <objects>
+                <navigationController id="FWv-K9-pQw" customClass="MainNavigationController" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="aGr-SO-evG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="4x3-mX-SgD" kind="relationship" relationship="rootViewController" id="a2c-l5-qEM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bmn-SW-zMK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3494" y="1557"/>
+        </scene>
+        <!--Main Navigation Controller-->
+        <scene sceneID="3zh-Hi-Exm">
+            <objects>
+                <navigationController id="3Ie-Nx-Qa1" customClass="MainNavigationController" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="H6y-S2-HSU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="bHA-jU-W8Q" kind="relationship" relationship="rootViewController" id="lmm-wl-KaQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9Ce-Lv-eyE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3500" y="2133"/>
+        </scene>
+    </scenes>
+    <classes>
+        <class className="MainNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainNavigationController.h"/>
+        </class>
+        <class className="MapWebView" superclassName="UIWebView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapWebView.h"/>
+        </class>
+        <class className="MapWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MapWebViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="settingsButtonTapped:"/>
+                <relationship kind="outlet" name="mapWebView" candidateClass="MapWebView"/>
+                <relationship kind="outlet" name="searchBar" candidateClass="UISearchBar"/>
+            </relationships>
+        </class>
+        <class className="MeasureViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MeasureViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="measuringTapped:"/>
+                <relationship kind="action" name="saveTapped:"/>
+                <relationship kind="outlet" name="measuringButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="saveButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="MenuViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MenuViewController.h"/>
+        </class>
+        <class className="TablePickerController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TablePickerController.h"/>
+            <relationships>
+                <relationship kind="action" name="closeButtonTapped:"/>
+            </relationships>
+        </class>
+    </classes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

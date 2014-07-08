@@ -1,0 +1,57 @@
+package com.smartcampus.indoormodel;
+
+public class Building_Floor {
+	private int mID;
+	private int mFloorNumber;
+	private String mFloorName;
+	
+	public Building_Floor()
+	{
+		initialize(Integer.MIN_VALUE, null);
+	}
+	
+	public Building_Floor(int floorNumber)
+	{
+		initialize(floorNumber, null);
+	}
+	
+	public Building_Floor(int floorNumber, String floorName)
+	{
+		initialize(floorNumber, floorName);
+	}
+	
+	public String getFloorName()
+	{
+		return mFloorName;
+	}
+	
+	public int getFloorNumber()
+	{
+		return mFloorNumber;
+	}
+	
+	public int getID()
+	{
+		return mID;
+	}
+	
+	private void initialize(int floorNumber, String floorName)
+	{
+		this.mFloorNumber = floorNumber;
+		this.mFloorName = floorName;
+	}
+	public void setFloorName(String floorName)
+	{
+		mFloorName = floorName;
+	}
+	
+	public void setFloorNumber(int floorNumber)
+	{
+		mFloorNumber = floorNumber;
+	}
+	
+	public void setID(int id)
+	{
+		this.mID = id;
+	}
+}

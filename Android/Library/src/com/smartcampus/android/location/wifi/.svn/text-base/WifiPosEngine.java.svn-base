@@ -1,0 +1,113 @@
+package com.smartcampus.android.location.wifi;
+
+import com.smartcampus.indoormodel.Building;
+import com.smartcampus.indoormodel.graph.IGraph;
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.wifi.WifiMeasurement;
+
+public class WifiPosEngine {
+
+	private Building mCurrentBuilding;
+	private IGraph mGraph;
+	private Iterable<Vertex> secondarySearchSpace;	
+	private Vertex prevBestEstimateVertex;
+	private int numSecondaryBest;
+	private IPositioningAlgorithm mPosAlgorithm;
+	//This is a set which holds all the best scoring candidates
+	//Candidates will be added from the appropriate algorithm during location determination
+	//(We don't bother with encapsulation)
+	public static BCS BestCandidateSet;
+		
+	public WifiPosEngine(Building currentBuilding)
+	{
+		//this(currentBuilding, new AlgorithmHyperNNSS());
+		this(currentBuilding, new AlgorithmNNSS());
+	}
+	
+	public WifiPosEngine(Building currentBuilding, IPositioningAlgorithm posAlgorithm)
+	{
+		setCurrentBuilding(currentBuilding);
+		setPositioningAlgorithm(posAlgorithm);
+	}
+	
+	void setPositioningAlgorithm(IPositioningAlgorithm posAlgorithm)
+	{
+		this.mPosAlgorithm = posAlgorithm;
+	}
+		
+	public Building getCurrentBuilding()
+	{
+		return mCurrentBuilding;
+	}
+	
+	
+	public EstimateResult getEstimate(WifiMeasurement currentMeasurement)
+    {  
+		//Check ready state
+		if (mGraph == null)
+			return null;
+		
+		//Maintain primary and secondary search space
+		//Cf OfflineClientPocketPCUF
+		if (secondarySearchSpace == null)
+		{
+			secondarySearchSpace = mGraph.getVertices();
+		}
+		EstimateResult primaryEstimate = new EstimateResult(null, Double.MAX_VALUE);
+		EstimateResult secondaryEstimate = new EstimateResult(null, Double.MAX_VALUE);
+		
+		BestCandidateSet = new BCS(5); //candidates are added in the compare methods below
+		
+		//measurement is compared with primary search space (adjacent vertices to previous estimated vertex)
+		//and secondary search space (non-connected nodes or the full graph)
+		if (prevBestEstimateVertex != null)
+		{
+			primaryEstimate = mPosAlgorithm.compare(prevBestEstimateVertex.adjacentVertices(), currentMeasurement);
+		}
+		secondaryEstimate = mPosAlgorithm.compare(secondarySearchSpace, currentMeasurement);
+				
+		//Changed to accomodate hyper, where we return null if online meas only has one mac
+		//Vertex best = null;
+		EstimateResult bestEstimate = null;
+		if (primaryEstimate != null) 
+			bestEstimate = primaryEstimate; 
+		if (secondaryEstimate != null)
+		{
+			//The primary estimate may be overriden by a secondary if it is better for the second time in a row
+			if (secondaryEstimate.getDistance() < primaryEstimate.getDistance())
+			{
+				numSecondaryBest++;
+				if (numSecondaryBest >= 2 || prevBestEstimateVertex == null)
+				{
+					numSecondaryBest = 0;
+					bestEstimate = secondaryEstimate; //.getVertex();
+				}
+			}
+			else
+			{
+				numSecondaryBest = 0;
+			}			
+		}
+		prevBestEstimateVertex = bestEstimate.getVertex();
+		
+		//Currently, the error estimate is also calculated in the compare methods, 
+		//but we override that logic here since this implementation considers the global 
+		//candidates - not just the local primary- or secondary candidates. 
+		//We throw in an extra 5 meters to account for movement
+		double error = Math.ceil(BestCandidateSet.getMaxDistance()); //  + 5;
+		bestEstimate.setErrorEstimate(error);
+		
+		return bestEstimate;
+    }
+	
+	public void setCurrentBuilding(Building currentBuilding)
+	{
+		this.mCurrentBuilding = currentBuilding;
+		if (this.mCurrentBuilding != null)
+		{
+			this.mGraph = mCurrentBuilding.getGraphModel();
+			secondarySearchSpace = this.mGraph.getVertices();
+		}
+	}
+	
+}

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.smartcampus"
+      android:versionCode="1"
+      android:versionName="1.0">
+
+    <application
+     	android:icon="@drawable/knap_end_lille"
+     	android:label="@string/app_name">
+                  
+        <activity android:label="@string/app_name" android:name=".android.ui.SplashScreenActivity">
+        </activity>
+        
+        <activity
+             android:name=".android.ui.AboutActivity"
+        	 android:configChanges="orientation|keyboardHidden"
+             android:label="@string/app_name">        
+        </activity>
+        
+        <activity
+             android:name=".android.ui.maps.WebMap2D"
+        	 android:configChanges="orientation|keyboardHidden"
+             android:label="@string/app_name">        
+        </activity>
+        
+<!-- ************************ ONLINE ACTIVITIES - BEGIN ************************************ -->
+        
+        <activity
+            android:name=".android.ui.maps.online.WebMap2DOnline"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name">
+                  
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- Enables other apps to start this app via the action name -->
+            <!-- 
+            <intent-filter>
+        		<action android:name="com.smartcampus.android.ui.maps.online.WebMap2DOnline.START"/>
+        		<category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        	 -->	
+        		
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+        	<meta-data
+        	    android:name="android.app.default_searchable"
+                android:value=".android.ui.online.search.SearchDialog" />
+            <receiver android:name=".NewSearchReceiver">
+				<intent-filter>
+					<action android:name="com.smartcampus.android.ui.online.search.SearchDialog.NEW_SEARCH"/>
+				</intent-filter>
+			</receiver>            
+        </activity>
+        
+        <activity android:name=".android.ui.online.search.SearchDialog" >
+	        <intent-filter>
+	            <action android:name="android.intent.action.SEARCH" />
+	        </intent-filter>
+	        <meta-data
+	            android:name="android.app.searchable"
+	            android:resource="@xml/searchable"/>
+        </activity>
+      
+        <activity
+        	android:name="com.smartcampus.android.ui.online.web.SymbolicLocationWebView"
+        	android:label="@string/app_name"
+     		android:theme="@android:style/Theme.NoTitleBar">
+     	</activity>
+     	
+        <activity
+        	android:name="com.smartcampus.android.ui.SetTrackingActivity"
+        	android:label="@string/app_name">
+     	</activity>
+     	        
+   
+<!-- ************************ ONLINE ACTIVITIES - END ************************************ -->     	
+    
+<!-- ************************ OFFLINE ACTIVITIES - BEGIN ********************************* -->
+     	        
+        <activity
+        	android:name=".android.ui.maps.offline.WebMap2DOffline"
+        	android:configChanges="orientation|keyboardHidden">
+        	
+        	<receiver android:name=".WifiMeasurementUploadedReceiver">
+				<intent-filter>
+					<action android:name="com.smartcampus.android.ui.offline.wifi.MEASUREMENT_UPLOADED"/>
+				</intent-filter>
+			</receiver>
+			<receiver android:name=".SymbolicLocationUploadedReceiver">
+				<intent-filter>
+					<action android:name="com.smartcampus.android.ui.offline.graph.NEW_SYMBOLIC_LOCATION_UPLOADED"/>
+				</intent-filter>
+			</receiver>
+        </activity>    
+        	
+        <activity 
+        	android:name=".android.ui.offline.wifi.WifiScanForm"
+       		android:configChanges="orientation|keyboardHidden">
+       	</activity>        
+                
+        <!-- Graph Related Activities -->
+        <activity
+        	android:name=".android.ui.maps.offline.graph.edge.WebMap2DAddEdge"
+        	android:configChanges="orientation|keyboardHidden">
+        </activity>
+        
+        <activity
+        	android:name=".android.ui.maps.offline.graph.vertex.WebMap2DRemoveVertex"
+        	android:configChanges="orientation|keyboardHidden">
+        </activity>
+        
+        <activity
+        	android:name=".android.ui.maps.building.WebMap2DSelectBuildingLocation"
+        	android:configChanges="orientation|keyboardHidden">
+        </activity>
+        
+        <activity android:name="com.smartcampus.android.ui.offline.graph.EditGraph"
+                  android:label="@string/app_name">            
+        </activity>
+                              
+        <activity android:name="com.smartcampus.android.ui.offline.graph.EditSymbolicLocation"
+                  android:label="@string/app_name">            
+        </activity>
+        
+        <activity android:name="com.smartcampus.android.ui.offline.graph.EditBuilding"
+                  android:label="@string/app_name">            
+        </activity>
+        
+        <activity android:name="com.smartcampus.android.ui.offline.graph.ChooseBuilding"
+                  android:label="@string/app_name">            
+        </activity>
+        
+        <activity android:name=".android.ui.offline.graph.EditBuilding_Floor"
+                  android:label="@string/app_name">            
+        </activity>
+        
+        <activity android:name=".android.ui.offline.graph.ChooseBuilding_Floor"
+                  android:label="@string/app_name">                 
+        </activity>        
+ 
+<!-- ************************ OFFLINE ACTIVITIES - END ********************************* -->
+         
+<!-- **************************** COMMON STUFF ************************************ -->
+            
+        <service android:name=".android.wifi.WifiMeasurementBuilder">
+			<intent-filter>
+				<action android:name="com.smartcampus.android.wifi.NEW_MEASUREMENT" />
+				<action android:name="com.smartcampus.android.wifi.NEW_SCAN" />
+			</intent-filter>
+		</service>	
+		
+		<service android:name=".android.location.LocationService">
+		</service>
+		        
+        <uses-library android:name="com.google.android.maps" />
+        
+    </application>
+    
+    <supports-screens 
+	    android:smallScreens="true"
+	    android:normalScreens="true"
+	    android:largeScreens="true"/>    
+    
+    <uses-feature android:name="android.hardware.wifi" />
+    <uses-feature android:name="android.hardware.location"/>
+    <uses-feature android:name="android.hardware.sensor.accelerometer"/>    
+        
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+</manifest>

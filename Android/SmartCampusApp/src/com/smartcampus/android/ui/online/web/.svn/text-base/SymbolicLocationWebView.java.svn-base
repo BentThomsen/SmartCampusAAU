@@ -1,0 +1,78 @@
+package com.smartcampus.android.ui.online.web;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.smartcampus.R;
+import com.smartcampus.android.ui.Globals;
+
+public class SymbolicLocationWebView extends Activity {
+
+	private class MyWebViewClient extends WebViewClient {
+	    @Override
+	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	        view.loadUrl(url);
+	        return true;
+	    }
+	}
+	private WebView mWebView;
+	
+	private String initialUrl;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+	    setContentView(R.layout.online_symbolic_web);
+	    
+	    this.initialUrl = getIntent().getStringExtra(Globals.URL_EXTRA);
+	    
+	    mWebView = (WebView) findViewById(R.id.symbolic_web_view);
+	    mWebView.getSettings().setJavaScriptEnabled(true);
+	    mWebView.loadUrl(this.initialUrl);
+	    //The above is quite sufficient (i.e., the nested class and onKeyDown override seem superfluous
+	    
+	    mWebView.setWebViewClient(new MyWebViewClient());
+	}
+	
+	/*
+	 * This menu is used to provide a means for the user
+	 * to return to the previous activity (supposedly, Map2D)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.sym_loc_web_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
+	        mWebView.goBack();
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.return_btn:
+			// Simply close the activity and return to the previous whenever the user
+			// taps the menu button
+			finish();
+			break;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}

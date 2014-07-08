@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android" >
+	
+	<ListView
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:drawSelectorOnTop="false"
+		android:layout_weight="1"
+		android:id="@android:id/list" />
+	
+	<!-- 
+    <Button
+    	android:id="@+id/offline_choose_from_newButton"
+    	android:layout_height="wrap_content"
+    	android:layout_width="wrap_content"
+    	android:text="New ..." /> 		
+	 -->    	
+</LinearLayout>

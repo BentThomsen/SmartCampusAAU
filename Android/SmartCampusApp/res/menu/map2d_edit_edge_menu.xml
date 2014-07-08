@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+    	android:title="Add Link"
+    	android:icon="@drawable/ic_menu_add_link" 
+    	android:id="@+id/edit_edge_add_link">
+   	</item>
+   	<item 
+    	android:title="Remove Link" 
+    	android:icon="@drawable/ic_menu_remove_link"    	
+    	android:id="@+id/edit_edge_remove_link">
+   	</item>
+    <item 
+    	android:title="Change Floor" 
+    	android:icon="@drawable/ic_menu_change_floor" 
+    	android:id="@+id/edit_edge_floor_changer">
+   	</item>
+    <item 
+    	android:icon="@drawable/ic_menu_nearby" 
+    	android:title="What's Nearby?" 
+    	android:id="@+id/edit_edge_what_is_here">
+   	</item>    
+</menu>

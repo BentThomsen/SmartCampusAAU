@@ -1,0 +1,73 @@
+package com.smartcampus.baselogic;
+
+/// <summary>
+/// A content entry used for representing a headline, body and unique id
+/// of received content
+/// </summary>
+public class ContentEntry
+{
+    /// <summary>
+    /// The unique index
+    /// </summary>
+    private long contentIndex;
+    /// <summary>
+    /// The headline for the content
+    /// </summary>
+    private String description;
+    /// <summary>
+    /// The url for the actual content or html with the content
+    /// </summary>
+    private String url;
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="url">The url for the actual content or html with the content</param>
+    /// <param name="description">The headline for the content</param>
+    /// <param name="contentIndex">The unique index</param>
+    public ContentEntry(String url, String description, long contentIndex)
+    {
+        this.description = description;
+        this.url = url;
+        this.contentIndex = contentIndex;
+    }
+
+    /// <summary>
+    /// The unique index
+    /// </summary>
+    public long GetContentIndex() {
+    	return contentIndex;
+    }
+    /// <summary>
+    /// The headline
+    /// </summary>
+    public String GetDescription() {
+        return description;
+    }
+
+    /// <summary>
+    /// The url from which to fetch the content or the content in html
+    /// </summary>
+    public String GetUrl() {
+    	return url;
+    }
+    public void SetContentIndex(long value) {
+        contentIndex = value; 
+    }
+
+    public void SetDescription(String value) {
+    	description = value; 
+    }
+    public void SetUrl(String value) {
+    	url = value; 
+    }
+    
+    /// <summary>
+    /// Overloaded - returns the headline
+    /// </summary>
+    /// <returns></returns>
+    public String toString()
+    {
+        return description;
+    }
+}

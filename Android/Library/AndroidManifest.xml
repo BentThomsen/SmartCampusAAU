@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.smartcampus"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="7" />
+<instrumentation android:targetPackage="com.smartcampus" android:name="android.test.InstrumentationTestRunner" />
+    
+    <application android:label="SmartCampusLibrary">
+            
+    	<service android:name=".android.wifi.WifiMeasurementBuilder">
+			<intent-filter>
+				<action android:name="com.smartcampus.android.wifi.NEW_MEASUREMENT" />
+				<action android:name="com.smartcampus.android.wifi.NEW_SCAN" />
+			</intent-filter>
+		</service>	
+		
+		<service
+			android:name="com.smartcampus.android.location.LocationService">
+		</service>
+    
+    </application>
+    
+    <uses-library android:name="android.test.runner" />
+    
+    <uses-feature android:name="android.hardware.wifi" />
+    <uses-feature android:name="android.hardware.location"/>
+    <uses-feature android:name="android.hardware.sensor.accelerometer"/>    
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />    
+</manifest>

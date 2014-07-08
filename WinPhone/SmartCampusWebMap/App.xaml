@@ -1,0 +1,82 @@
+﻿<Application 
+    x:Class="SmartCampusWebMap.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:m="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps">
+
+    <!--Application Resources-->
+    <Application.Resources>
+        <ResourceDictionary>
+            <Style x:Key="PushpinStyle" TargetType="m:Pushpin">
+                <Setter Property="BorderBrush" Value="#FFF4F4F5" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Canvas Height="0"
+                        RenderTransformOrigin="0.5,0.5"
+                        Width="0">
+                                <Canvas RenderTransformOrigin="0.5,0.5"
+                            Height="1"
+                            Width="1">
+                                    <Path Data="M22.5,1 C34.374123,1 44,10.625878 44,22.5 C44,31.034525 39.027256,38.407604 31.821138,41.879868 L31.359026,42.095631 L22.702744,60.864998 L13.900847,42.209641 L13.651964,42.100761 C6.1912994,38.727623 0.99999976,31.220058 1,22.5 C0.99999976,10.625878 10.625878,1 22.5,1 z"
+                                Fill="{TemplateBinding BorderBrush}"
+                                Height="61.865"
+                                Stretch="Fill"
+                                Stroke="Black"
+                                StrokeThickness="2"
+                                StrokeLineJoin="Miter"
+                                UseLayoutRounding="False"
+                                Width="45"
+                                RenderTransformOrigin="0.5,0.5"
+                                Canvas.Left="-2.703"
+                                Canvas.Top="-7.187" >
+                                        <Path.RenderTransform>
+                                            <CompositeTransform TranslateX="-20"
+                                                    TranslateY="-55"/>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                    <Path Data="M35,17.5 C35,27.164984 27.164984,35 17.5,35 C7.8350167,35 0,27.164984 0,17.5 C0,7.8350167 7.8350167,0 17.5,0 C27.164984,0 35,7.8350167 35,17.5 z"
+                                Fill="{TemplateBinding Background}"
+                                HorizontalAlignment="Left"
+                                Height="35"
+                                Stretch="Fill"
+                                StrokeThickness="2"
+                                VerticalAlignment="Top"
+                                RenderTransformOrigin="0.5,0.5"
+                                Width="35"
+                                UseLayoutRounding="False"
+                                Canvas.Top="-7.4"
+                                Canvas.Left="-2.888" >
+                                        <Path.RenderTransform>
+                                            <CompositeTransform TranslateX="-15"
+                                                    TranslateY="-50"/>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Canvas>
+                                <ContentPresenter Width="35"
+                                        Height="35"
+                                        RenderTransformOrigin="0.5,0.5"
+                                        Canvas.Top="-3.5">
+                                    <ContentPresenter.RenderTransform>
+                                        <CompositeTransform TranslateX="-18"
+                                                TranslateY="-54"/>
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                            </Canvas>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.ApplicationLifetimeObjects>
+        <!--Required object that handles lifetime events for the application-->
+        <shell:PhoneApplicationService 
+            Launching="Application_Launching" Closing="Application_Closing" 
+            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+    </Application.ApplicationLifetimeObjects>
+
+</Application>

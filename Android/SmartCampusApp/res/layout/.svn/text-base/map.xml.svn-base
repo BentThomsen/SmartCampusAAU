@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+	    <!-- Luckows key: 0PgQ2vnH_jtD04bobuDEgAjkx5MfjA2alA6WkAA -->
+	    <RelativeLayout 
+	    	android:layout_height="wrap_content" 
+	    	android:layout_width="fill_parent" 
+	    	android:id="@+id/mapLayout" 
+	    	xmlns:android="http://schemas.android.com/apk/res/android">
+	    	
+	    	<com.google.android.maps.MapView 
+	    		android:layout_height="wrap_content" 
+	    		android:layout_width="fill_parent" 
+	    		android:id="@+id/map" 
+	    		android:clickable="true" 
+	    		android:apiKey="0BIxWtM3MLxXEBmk4xUPmE02hZNG4Vnoz70DDZQ"/>
+	    		
+	    	<!-- prev id for nedenstaaende ImageButton: changeFlrBtnMap trackPositionButton-->	    			
+	    	<ImageButton 
+	    		android:layout_height="wrap_content" 
+	    		android:layout_width="wrap_content" 
+	    		android:id="@+id/changeFlrBtnMap" 
+	    		android:src="@drawable/navi_arrow" 
+	    		android:layout_alignParentTop="true" 
+	    		android:layout_alignParentRight="true"/>
+   		</RelativeLayout>
+	    
+	    <!-- 
+	    <com.google.android.maps.MapView
+    	    android:clickable="true"
+    	    android:apiKey="0BIxWtM3MLxXEBmk4xUPmE02hZNG4Vnoz70DDZQ"
+    	    xmlns:android="http://schemas.android.com/apk/res/android" 
+    	    android:layout_width="fill_parent" 
+    	    android:id="@+id/map" 
+    	    android:layout_height="wrap_content"/>
+        -->

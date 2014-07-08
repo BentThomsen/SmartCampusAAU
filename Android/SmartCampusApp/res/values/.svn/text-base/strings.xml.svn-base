@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="hello">Hello World, Map2D!</string>
+    <string name="app_name">SmartCampusAAU</string>
+    <string name="floor_prompt">Choose a floor</string>
+    <string-array name="floors_array">
+         <item>First Floor</item>
+         <item>Second Floor</item>
+    </string-array>
+    <string name="add_link">Add link from</string>
+    <string name="remove_link">Remove link from</string>
+    <string name="return_map_btn">Return to map</string>
+    <string name="ok">OK</string>
+    <string name="info_type_prompt">Specify Property</string>
+    <string name="search_hint">Search Points of Interest</string>
+</resources>

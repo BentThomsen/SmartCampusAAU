@@ -1,0 +1,8 @@
+package com.smartcampus.android.location.wifi;
+
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.wifi.WifiMeasurement;
+
+public interface IPositioningAlgorithm {
+	EstimateResult compare(Iterable<Vertex> vertices, WifiMeasurement measurement);
+}

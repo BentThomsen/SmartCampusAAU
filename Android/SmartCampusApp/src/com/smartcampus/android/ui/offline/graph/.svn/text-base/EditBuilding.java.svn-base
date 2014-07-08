@@ -1,0 +1,533 @@
+package com.smartcampus.android.ui.offline.graph;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.Address;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.smartcampus.R;
+import com.smartcampus.android.location.LocationService;
+import com.smartcampus.android.ui.Globals;
+import com.smartcampus.android.ui.maps.building.WebMap2DSelectBuildingLocation;
+import com.smartcampus.indoormodel.Building;
+import com.smartcampus.webclient.IWebClient;
+import com.smartcampus.webclient.OData4jWebClient;
+
+public class EditBuilding extends Activity {
+	
+	private class BuildingAddressUpdatedReceiver extends BroadcastReceiver {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			updateAddressTextView();
+		}
+	}
+	
+	//Upload a building in the background (update or create)
+	//Form: AsyncTask<[Input Parameter Type], [Progress Report Type], [Result Type]>
+	private class UploadBuildingTask extends AsyncTask<Building, Void, Integer>
+    {
+		private IWebClient mWebClient = new OData4jWebClient();
+		private String downloadMsg;
+		private final int errorVal = Integer.MAX_VALUE;
+		
+		//NOTE: No id is specified
+		//If we have a new building, we get the id from the server
+		//Otherwise, we set the id from the current building
+		@Override
+		protected Integer doInBackground(Building... arg0) {
+			downloadMsg = "Ok";
+			
+			Building uploadBuilding = arg0[0];
+						
+			int id = -1;
+			//1) upload new building
+			if (mIsNewBuilding) {
+				//The server assigns a new auto-incremented id
+				try
+				{
+					id = mWebClient.addBuilding(uploadBuilding);
+				}
+				catch (Exception ex)
+				{
+					Throwable t = ex.getCause();
+					if (t != null)
+						downloadMsg = t.getMessage();
+					else
+						downloadMsg = ex.getMessage();
+					return errorVal;
+				}
+				uploadBuilding.setBuildingID(id);	
+				
+				LocationService.addAvailableBuilding(uploadBuilding);
+				//We have ourselves a new current building
+				LocationService.CurrentBuilding = uploadBuilding;
+			}
+			//2) or update existing
+			else
+			{
+				try
+				{
+					mWebClient.updateBuilding(uploadBuilding);
+				}
+				catch (Exception ex)
+				{
+					Throwable t = ex.getCause();
+					if (t != null)
+						downloadMsg = t.getMessage();
+					else
+						downloadMsg = ex.getMessage();
+					return errorVal;
+				}
+			}		
+			
+			return uploadBuilding.getBuildingID(); 
+		}		
+		
+		//The id denotes which vertex was altered
+		//If it was only an update, the id will be -1
+		//else the id is the id of the vertex affected
+		//We only broadcast in case of a NEW symbolic location (need to change icon to bound)
+		protected void onPostExecute(Integer buildingId)
+		{
+			if (buildingId == errorVal)
+			{
+				Globals.createErrorDialog(EditBuilding.this, "Error", downloadMsg).show();
+			}
+			else
+			{
+				Toast.makeText(EditBuilding.this, "Changes saved", Toast.LENGTH_SHORT).show();
+				if (mIsNewBuilding)
+				{
+					Intent intent = new Intent(BROADCAST_BUILDING_UPLOADED);
+					sendBroadcast(intent);	
+				}
+				finish();
+			}
+		}		
+    }
+	
+	public static Building SELECTED_BUILDING;
+	public static final String BROADCAST_BUILDING_UPLOADED = "com.smartcampus.android.ui.offline.graph.BROADCAST_BUILDING_UPLOADED";
+	private EditText mBuildingNameEditText;
+	private EditText mUrlEditText;
+	private TextView mAddressTextView;
+	
+	private Button   mSetLocationButton;
+	private Button   mSaveButton;
+	private Building mCurrentBuilding;
+	
+	private boolean mIsNewBuilding;
+	
+	private BuildingAddressUpdatedReceiver mReceiver;
+	
+	private String getCollectedAddress(Address a)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("Coordinates: ");
+		sb.append(a.getLatitude() + "; " + a.getLongitude()).append("\n");
+		sb.append(a.getAddressLine(0)).append("\n");
+		sb.append(a.getPostalCode()).append("\n");
+		sb.append(a.getCountryName()).append("\n");	
+		return sb.toString();
+	}
+
+	private String getCollectedAddress(Building b)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("Coordinates: " + b.getLatitude() + "; " + b.getLongitude());
+		sb.append(b.getMaxAddress()).append("\n");
+		sb.append(b.getPostalCode()).append("\n");
+		sb.append(b.getCountry()).append("\n");	
+		return sb.toString();
+	};
+	
+	private void initializeInputBoxes()
+	{
+		mCurrentBuilding = EditBuilding.SELECTED_BUILDING; 
+		if (mCurrentBuilding == null)
+		{
+			mIsNewBuilding = true;
+		}
+		else
+		{
+			mIsNewBuilding = false;
+			mBuildingNameEditText.setText(mCurrentBuilding.getName());
+			mAddressTextView.setText(getCollectedAddress(mCurrentBuilding));
+		}		
+	}
+	
+	private void initializeSaveButton()
+	{
+		mSaveButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+							
+				if (!isValidField(mBuildingNameEditText.getText().toString()))
+				{
+					Globals.createErrorDialog(EditBuilding.this, "Missing Building Name", "Please specify a building name").show();
+					return;
+				}
+				if (WebMap2DSelectBuildingLocation.getSelectedAddress() == null)
+				{
+					Globals.createErrorDialog(EditBuilding.this, "Missing address", "Please select a location for the building").show();
+					return;
+				}
+																		
+				//(create or update - set CurrentBuilding to tmpBuilding)
+				Building tmpBuilding;
+				if (mIsNewBuilding)
+				{
+					tmpBuilding = new Building();					
+				}
+				else 
+				{
+					tmpBuilding = LocationService.CurrentBuilding;
+				}
+				Address add = WebMap2DSelectBuildingLocation.getSelectedAddress();
+				tmpBuilding.setName(mBuildingNameEditText.getText().toString());
+				tmpBuilding.setUrl(mUrlEditText.getText().toString());
+				tmpBuilding.setMaxAddress(add.getAddressLine(0));
+				tmpBuilding.setPostalCode(add.getPostalCode());
+				tmpBuilding.setCountry(add.getCountryName());
+				tmpBuilding.setLatitude(add.getLatitude());
+				tmpBuilding.setLongitude(add.getLongitude());
+				
+				Toast.makeText(EditBuilding.this, "Uploading changes...", Toast.LENGTH_SHORT).show();
+				new UploadBuildingTask().execute(tmpBuilding);
+				finish();									
+			}					
+		});
+	}
+	
+	private void initializeSetLocationButton() {
+		mSetLocationButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(EditBuilding.this, WebMap2DSelectBuildingLocation.class));
+			}
+		});
+	}
+	
+	private boolean isValidField(String text)
+	{
+		return text != null && text.length() > 0;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		this.setContentView(R.layout.offline_edit_building);
+		
+		mBuildingNameEditText 	= (EditText) this.findViewById(R.id.offline_edit_building_name_editText);
+		mUrlEditText			= (EditText) this.findViewById(R.id.offline_edit_building_url_editText);
+		mAddressTextView		= (TextView) this.findViewById(R.id.offline_edit_building_address_textView);
+		mSetLocationButton		= (Button)	 this.findViewById(R.id.offline_edit_building_set_location_button);
+		mSaveButton				= (Button)   this.findViewById(R.id.offline_edit_building_save_button);
+	
+		initializeInputBoxes();
+		initializeSetLocationButton();
+		initializeSaveButton();
+		
+		IntentFilter filter;
+		filter = new IntentFilter(WebMap2DSelectBuildingLocation.BROADCAST_ADDRESS_UPDATED);
+		mReceiver = new BuildingAddressUpdatedReceiver();
+		registerReceiver(mReceiver, filter);
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		unregisterReceiver(mReceiver);
+		super.onDestroy();
+	}
+	
+	public void updateAddressTextView() {
+		Address a = WebMap2DSelectBuildingLocation.getSelectedAddress(); 
+		if (a != null) {
+			mAddressTextView.setText(getCollectedAddress(a));
+		}		
+	}
+}
+
+/*************** OLD EditBuilding ***************************/
+/*
+ * package com.smartcampus.android.ui.offline.graph;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import com.smartcampus.R;
+import com.smartcampus.android.location.LocationService;
+import com.smartcampus.android.ui.Globals;
+import com.smartcampus.indoormodel.Building;
+import com.smartcampus.webclient.IWebClient;
+import com.smartcampus.webclient.OData4jWebClient;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class EditBuilding extends Activity {
+	
+	public static Building SELECTED_BUILDING;
+	
+	public static final String BROADCAST_BUILDING_UPLOADED = "com.smartcampus.android.ui.offline.graph.BROADCAST_BUILDING_UPLOADED";
+	
+	private EditText mBuildingNameEditText;
+	private EditText mAddressEditText;
+	private EditText mPostalCodeEditText;
+	private EditText mCountryEditText;
+	private EditText mUrlEditText;
+	private Button   mSaveButton;
+	
+	private Building mCurrentBuilding;
+	private boolean mIsNewBuilding;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		this.setContentView(R.layout.offline_edit_building);
+		
+		mBuildingNameEditText 	= (EditText) this.findViewById(R.id.offline_edit_building_name_editText);
+		mAddressEditText		= (EditText) this.findViewById(R.id.offline_edit_building_address_editText);
+		mPostalCodeEditText		= (EditText) this.findViewById(R.id.offline_edit_building_postalcode_editText);
+		mCountryEditText		= (EditText) this.findViewById(R.id.offline_edit_building_country_editText);
+		mUrlEditText			= (EditText) this.findViewById(R.id.offline_edit_building_url_editText);
+		mSaveButton				= (Button)   this.findViewById(R.id.offline_edit_building_save_button);
+	
+		initializeInputBoxes();
+		initializeSaveButton();
+	}
+	
+	private void initializeInputBoxes()
+	{
+		mCurrentBuilding = EditBuilding.SELECTED_BUILDING; 
+		if (mCurrentBuilding == null)
+		{
+			mIsNewBuilding = true;
+		}
+		else
+		{
+			mIsNewBuilding = false;
+			mBuildingNameEditText.setText(mCurrentBuilding.getName());
+			mAddressEditText.setText(mCurrentBuilding.getMaxAddress());
+			mPostalCodeEditText.setText(mCurrentBuilding.getPostalCode());
+			mCountryEditText.setText(mCurrentBuilding.getCountry());
+			mUrlEditText.setText(mCurrentBuilding.getUrl());					
+		}		
+	}
+	
+	private void initializeSaveButton()
+	{
+		mSaveButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+							
+				if (!validFields())
+				{
+					AlertDialog.Builder ad = new Builder(EditBuilding.this);
+					ad.setTitle("Missing required fields");
+					ad.setMessage("Please fill out the missing required fields (marked *)");
+					String msg = "Ok";
+					ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+														
+						}
+					});
+					ad.show();
+					return;
+				}
+				
+				String name = mBuildingNameEditText.getText().toString();
+				String address = mAddressEditText.getText().toString();
+				String postal = mPostalCodeEditText.getText().toString();
+				String country = mCountryEditText.getText().toString();
+				String url = mUrlEditText.getText().toString();
+														
+				//upload building in the background
+				//(create or update - set CurrentBuilding to tmpBuilding)
+				Building tmpBuilding;
+				if (mIsNewBuilding)
+				{
+					tmpBuilding = new Building();					
+				}
+				else 
+				{
+					tmpBuilding = LocationService.CurrentBuilding;
+				}
+				tmpBuilding.setName(name);
+				tmpBuilding.setMaxAddress(address);
+				tmpBuilding.setPostalCode(postal);
+				tmpBuilding.setCountry(country);
+				tmpBuilding.setUrl(url);
+				
+				Toast.makeText(EditBuilding.this, "Uploading changes...", Toast.LENGTH_SHORT).show();
+				new UploadBuildingTask().execute(tmpBuilding);
+				finish();									
+			}					
+		});
+	}
+	
+	private boolean validFields()
+	{
+		return 
+			isValidField(mBuildingNameEditText.getText().toString()) &&
+			isValidField(mAddressEditText.getText().toString()) &&
+			isValidField(mPostalCodeEditText.getText().toString()) &&
+			isValidField(mCountryEditText.getText().toString());
+	}
+	
+	private boolean isValidField(String text)
+	{
+		return text != null && text.length() > 0;
+	}
+	
+	//Upload a building in the background (update or create)
+	//Form: AsyncTask<[Input Parameter Type], [Progress Report Type], [Result Type]>
+	private class UploadBuildingTask extends AsyncTask<Building, Void, Integer>
+    {
+		private IWebClient mWebClient = new OData4jWebClient();
+		private String downloadMsg;
+		private final int errorVal = Integer.MAX_VALUE;
+		
+		//NOTE: No id is specified
+		//If we have a new building, we get the id from the server
+		//Otherwise, we set the id from the current building
+		@Override
+		protected Integer doInBackground(Building... arg0) {
+			downloadMsg = "Ok";
+			
+			Building uploadBuilding = arg0[0];
+			
+			setBuildingCoordinatesBasedOnGeocoding(uploadBuilding);
+			
+			int id = -1;
+			//1) upload new building
+			if (mIsNewBuilding) {
+				//The server assigns a new auto-incremented id
+				try
+				{
+					id = mWebClient.addBuilding(uploadBuilding);
+				}
+				catch (Exception ex)
+				{
+					Throwable t = ex.getCause();
+					if (t != null)
+						downloadMsg = t.getMessage();
+					else
+						downloadMsg = ex.getMessage();
+					return errorVal;
+				}
+				uploadBuilding.setBuildingID(id);	
+				
+				LocationService.addAvailableBuilding(uploadBuilding);
+				//We have ourselves a new current building
+				LocationService.CurrentBuilding = uploadBuilding;
+			}
+			//2) or update existing
+			else
+			{
+				try
+				{
+					mWebClient.updateBuilding(uploadBuilding);
+				}
+				catch (Exception ex)
+				{
+					Throwable t = ex.getCause();
+					if (t != null)
+						downloadMsg = t.getMessage();
+					else
+						downloadMsg = ex.getMessage();
+					return errorVal;
+				}
+			}		
+			
+			return uploadBuilding.getBuildingID(); 
+		}
+
+		private boolean setBuildingCoordinatesBasedOnGeocoding(
+				Building uploadBuilding) {
+			
+			boolean success = true; //only tells us whether got through to the geocoding server, not whether the result is any good
+			//Geocoding to find lat, lon based on address
+			double lat, lon;
+			Geocoder gc = new Geocoder(EditBuilding.this, Locale.getDefault());
+			String address = 
+				uploadBuilding.getMaxAddress() + ", " +
+				uploadBuilding.getPostalCode() + ", " +
+				uploadBuilding.getCountry();
+			try {
+				List<Address> foundAddresses = gc.getFromLocationName(address, 1);
+				lat = foundAddresses.get(0).getLatitude();
+				lon = foundAddresses.get(0).getLongitude();
+			}
+			catch (IOException e1) 
+			{
+				lat = lon = -1;		
+				success = false;
+			}
+			catch (Exception e2)
+			{
+				lat = lon = -1;
+				success = false;
+			}
+			uploadBuilding.setLatitude(lat);
+			uploadBuilding.setLongitude(lon);
+			
+			return success;
+		}
+		
+		//The id denotes which vertex was altered
+		//If it was only an update, the id will be -1
+		//else the id is the id of the vertex affected
+		//We only broadcast in case of a NEW symbolic location (need to change icon to bound)
+		protected void onPostExecute(Integer buildingId)
+		{
+			if (buildingId == errorVal)
+			{
+				Globals.createErrorDialog(EditBuilding.this, "Error", downloadMsg).show();
+			}
+			else
+			{
+				Toast.makeText(EditBuilding.this, "Changes saved", Toast.LENGTH_SHORT).show();
+				if (mIsNewBuilding)
+				{
+					Intent intent = new Intent(BROADCAST_BUILDING_UPLOADED);
+					sendBroadcast(intent);	
+				}
+				finish();
+			}
+		}		
+    }
+}
+*/

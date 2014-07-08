@@ -1,0 +1,472 @@
+/*
+Copyright (c) 2014, Aalborg University
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+package com.smartcampus.android.ui.maps.offline;
+
+import java.util.List;
+
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.smartcampus.R;
+import com.smartcampus.android.ui.maps.WebMap2D;
+import com.smartcampus.android.ui.offline.graph.EditGraph;
+import com.smartcampus.android.ui.offline.graph.EditSymbolicLocation;
+import com.smartcampus.android.ui.offline.wifi.WifiScanForm;
+import com.smartcampus.indoormodel.AbsoluteLocation;
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.javascript.JSInterface;
+
+
+/**
+ * 
+ * @author rhansen
+ *
+ */
+public class WebMap2DOffline extends WebMap2D {
+	
+	private ImageView dpad_left, dpad_right, dpad_up, dpad_down;
+	private boolean dpadEnabled;
+	private static final int RELATIVE_PIXEL_UPDATE_INTERVAL = 3;
+	
+	
+	//callback for when a symbolic location has been added or modified.
+	//this receiver updates the graph overlay to reflect the changes. 
+	//registered in manifest (maybe not necessary?)
+	private class SymbolicLocationUploadedReceiver extends BroadcastReceiver {		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			WebMap2DOffline.cHasGraphChanged = true;
+			WebMap2DOffline.this.refreshUI();			
+		}
+	}
+	 
+	//callback for when a new measurement has been added.
+	//this receiver updates the graph overlay to reflect the changes. 
+	//registered in manifest (maybe not necessary?)
+	private class WifiMeasurementUploadedReceiver extends BroadcastReceiver {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			//Uri data = intent.getData();
+			boolean isNewVertex = intent.getBooleanExtra(WifiScanForm.INTENT_EXTRA_IS_NEW_VERTEX, false);
+			//Maybe move this check to WifiScanForm, and only broadcast if we have a NEW (previously unbound) vertex
+			if (isNewVertex)
+			{
+				int vertexId = intent.getIntExtra(WifiScanForm.INTENT_EXTRA_VERTEX_ID, -1);
+				Vertex v = mGraph.getVertexById(vertexId);
+				if (v != null)
+				{
+					WebMap2DOffline.cHasGraphChanged = true;
+					WebMap2DOffline.this.refreshUI();				
+				}
+			}
+		}
+	}	
+	
+	//callback for when a marker has been clicked and the title must change. 
+	private class TitleChangedReceiver extends BroadcastReceiver {		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String title = intent.getStringExtra(WebMap2DOffline.INTENT_EXTRA_TITLE);
+			if (title == null)
+				title = " - ";
+			WebMap2DOffline.this.setTitle(title);
+		}
+	}	
+	
+	//Indicates whether the graph has been altered in the offline mode.
+	//This is relevant, e.g., for updating the overlays when we go back to the
+	//online mode
+	private static boolean cHasGraphChanged;
+	//Used for Intent passing. 
+    //Indicates whether a vertex is selected (in contrast to an unbound location)
+    public static final String IS_LOCATION_BOUND = "IS_LOCATION_BOUND";
+	
+    //Indicates whether the title has changed (this occurs when a marker has been tapped
+    //(in javascript code - from another thread - that's why we are using a callback)
+    public static final String HAS_TITLE_CHANGED = "com.smartcampus.android.ui.maps.offline.WebMap2DOffline.HAS_TITLE_CHANGED";
+    public static final String INTENT_EXTRA_TITLE = "INTENT_EXTRA_TITLE";
+    
+	//Represents the selected 'vertex' - as determined by map/overlay onTap events.
+    //This is either a 'anonymous' (unbound) location, or an existing graph vertex
+	public static com.smartcampus.indoormodel.graph.Vertex SelectedOfflineVertex = null;
+    
+    public static boolean hasGraphChanged() { return cHasGraphChanged; } 
+    
+	//Indicates whether the selected offline vertex is bound or not
+    private boolean isBoundLocation;
+        
+    //Receiver for changes in symbolic locations (and changes the icon accordingly)
+    private SymbolicLocationUploadedReceiver mSymbolicLocationUploadedReceiver;
+    //Receiver for additions to the graph (and adds the vertex to the graph overlay)
+    private WifiMeasurementUploadedReceiver mWifiMeasurementUploadedReceiver;
+    //Receiver for title change (changed from javascript - another thread)
+    private TitleChangedReceiver mTitleChangedReceiver;
+
+    
+    //Used for drawing edges
+    //NOTE: We have duplicate code in this class and MapEditEdge.
+    //However, it is so little that it might not be worth to refactor
+    //private EdgeOverlay mEdgeOverlay;
+	
+    @Override
+    protected boolean addCurrentFloorToFloorChangerDialog()
+    {
+    	return false;
+    }
+	    
+    //In offline mode we manually select the current floor
+    @Override
+    public int getCurrentFloor() {
+		return mCurrentSelectedFloor;
+	}    
+    
+    @Override
+    protected List<Vertex> getVisibleVertices(List<Vertex> vertices)
+    {
+    	return vertices; //show everything
+    }
+      
+    private void initializeDpad() {
+        dpadEnabled = false;
+        
+        dpad_left = (ImageView)findViewById(R.id.dpad_leftT);   
+        dpad_left.setOnTouchListener(new OnTouchListener() {
+        	@Override
+        	public boolean onTouch(View arg0, MotionEvent me) {
+        		
+        		if (me.getAction() == MotionEvent.ACTION_DOWN) {
+        			JSInterface.updateSelectedLocation(webView, -RELATIVE_PIXEL_UPDATE_INTERVAL, 0);
+        			//sniperoverlay.updateSniperOverlayRelatively(-RELATIVE_PIXEL_UPDATE_INTERVAL, 0);
+        			
+        			dpad_left.setColorFilter(Color.argb(100, 255, 0, 0), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		} else if (me.getAction() == MotionEvent.ACTION_UP) {
+        			dpad_left.setColorFilter(Color.argb(0, 155, 155, 155), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		}
+        		return false;
+        	}
+         
+        });
+        
+        dpad_right = (ImageView)findViewById(R.id.dpad_rightT);
+        dpad_right.setOnTouchListener(new OnTouchListener() {
+        	@Override
+        	public boolean onTouch(View arg0, MotionEvent me) {
+        		
+        		if (me.getAction() == MotionEvent.ACTION_DOWN) {
+        			JSInterface.updateSelectedLocation(webView, RELATIVE_PIXEL_UPDATE_INTERVAL, 0);
+        			//sniperoverlay.updateSniperOverlayRelatively(RELATIVE_PIXEL_UPDATE_INTERVAL, 0);
+        			
+        			dpad_right.setColorFilter(Color.argb(100, 255, 0, 0), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		} else if (me.getAction() == MotionEvent.ACTION_UP) {
+        			dpad_right.setColorFilter(Color.argb(0, 155, 155, 155), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		}
+        		return false;
+        	}
+         
+        });
+        
+        
+        dpad_up = (ImageView)findViewById(R.id.dpad_upT);
+        dpad_up.setOnTouchListener(new OnTouchListener() {
+        	@Override
+        	public boolean onTouch(View arg0, MotionEvent me) {
+        		
+        		if (me.getAction() == MotionEvent.ACTION_DOWN) {
+        			JSInterface.updateSelectedLocation(webView, 0, -RELATIVE_PIXEL_UPDATE_INTERVAL);
+        			//sniperoverlay.updateSniperOverlayRelatively(0, -RELATIVE_PIXEL_UPDATE_INTERVAL);
+        			
+        			dpad_up.setColorFilter(Color.argb(100, 255, 0, 0), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		} else if (me.getAction() == MotionEvent.ACTION_UP) {
+
+        			dpad_up.setColorFilter(Color.argb(0, 155, 155, 155), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		}
+        		return false;
+        	}
+         
+        });
+        dpad_down = (ImageView)findViewById(R.id.dpad_downT);
+        dpad_down.setOnTouchListener(new OnTouchListener() {
+        	@Override
+        	public boolean onTouch(View arg0, MotionEvent me) {
+        		
+        		if (me.getAction() == MotionEvent.ACTION_DOWN) {
+        			JSInterface.updateSelectedLocation(webView, 0, RELATIVE_PIXEL_UPDATE_INTERVAL);
+        			//sniperoverlay.updateSniperOverlayRelatively(0, RELATIVE_PIXEL_UPDATE_INTERVAL);
+        			dpad_down.setColorFilter(Color.argb(100, 255, 0, 0), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		} else if (me.getAction() == MotionEvent.ACTION_UP) {
+        			dpad_down.setColorFilter(Color.argb(0, 155, 155, 155), android.graphics.PorterDuff.Mode.SRC_ATOP);
+        			return true;
+        		}
+        		return false;
+        	}
+         
+        });
+    }
+    
+    //indicates whether the current selection is a bound location
+    public boolean isCurrentLocationBound()
+	{
+		return isBoundLocation;
+	}
+     
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    	super.onConfigurationChanged(newConfig);    	
+    }
+    
+	/** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        //getIntent().getExtras()
+        
+        initializeDpad();
+         
+        IntentFilter newSymbolicLocationFilter;
+		newSymbolicLocationFilter = new IntentFilter(EditSymbolicLocation.BROADCAST_NEW_SYMBOLIC_LOCATION_UPLOADED);
+		mSymbolicLocationUploadedReceiver = new SymbolicLocationUploadedReceiver();
+		registerReceiver(mSymbolicLocationUploadedReceiver, newSymbolicLocationFilter);
+		
+		IntentFilter newVertexAddedFilter;
+		newVertexAddedFilter = new IntentFilter(WifiScanForm.BROADCAST_MEASUREMENT_UPLOADED);
+		mWifiMeasurementUploadedReceiver = new WifiMeasurementUploadedReceiver();
+		registerReceiver(mWifiMeasurementUploadedReceiver, newVertexAddedFilter);
+		
+		IntentFilter titleChangedFilter;
+		titleChangedFilter = new IntentFilter(WebMap2DOffline.HAS_TITLE_CHANGED);
+		mTitleChangedReceiver = new TitleChangedReceiver();
+		registerReceiver(mTitleChangedReceiver, titleChangedFilter);
+		
+		cHasGraphChanged = false;
+    }	
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.map2d_offline_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    	switch (item.getItemId()) {
+        case R.id.measure:
+        	if (!mCurrentBuilding.hasFloors())
+        	{
+        		Toast.makeText(this, "You need to add a floor first. (Edit Graph -> Add Floor", Toast.LENGTH_SHORT).show();
+        		return true;
+        	}
+        	else if (!mCurrentBuilding.hasFloorAt(mCurrentSelectedFloor))
+        	{
+        		Toast.makeText(this, "Please select a floor first. (Menu -> Change Floor", Toast.LENGTH_SHORT).show();
+        		return true;
+        	}
+        	else if (WebMap2DOffline.SelectedOfflineVertex == null)
+        	{
+        		Toast.makeText(this, "Please select a location on the map first", Toast.LENGTH_SHORT).show();
+        		return true;
+        	}
+        	else
+        	{
+        		startActivity(new Intent(WebMap2DOffline.this, WifiScanForm.class).putExtra(IS_LOCATION_BOUND, isCurrentLocationBound()));      	
+        		return true;
+        	}
+        case R.id.floor_changer_offline:
+        	AlertDialog alert = createFloorChangerDialog();
+        	alert.show();
+            return true;
+        case R.id.what_is_here_offline:
+        	AlertDialog nearbyPlacesDialog = createWhatsNearbyDialog();
+        	nearbyPlacesDialog.show();
+            return true;
+        case R.id.edit_graph:
+        	startActivity(new Intent(WebMap2DOffline.this, EditGraph.class));
+            return true;
+        case R.id.back_to_online:
+        	Toast toast = Toast.makeText(this, "Switching to Online Mode", Toast.LENGTH_LONG);
+        	toast.show();
+        	finish();
+            return true;
+        case R.id.enable_dpad:
+        	if(dpadEnabled) {
+            	dpad_left.setVisibility(View.GONE);
+            	dpad_right.setVisibility(View.GONE);
+            	dpad_up.setVisibility(View.GONE);
+            	dpad_down.setVisibility(View.GONE);
+            	item.setTitle("Enable D-pad");
+            	dpadEnabled = false;
+        	} else {
+	        	dpad_left.setVisibility(View.VISIBLE);
+	        	dpad_right.setVisibility(View.VISIBLE);
+	        	dpad_up.setVisibility(View.VISIBLE);
+	        	dpad_down.setVisibility(View.VISIBLE);
+	        	item.setTitle("Disable D-pad");
+	        	dpadEnabled = true;
+        	}
+        	return true;
+    	}
+        return super.onMenuItemSelected(featureId, item);
+    }
+	
+	/**
+	 * This method is called (from javascript) whenever the user taps a marker on the map. 
+	 * @param floorNum The current floor 
+	 * @param vertexId The id of the selected (tapped) vertex.
+	 */
+	@Override
+	public void onTap(int floorNum, int vertexId) {
+		if (mGraph == null) //this should never happen - it is just a quick test just in case.
+			return;
+		
+		final Vertex v = mGraph.getVertexById(vertexId);
+		
+		//NOTE: ID and (lat, lon) is for debugging (tracking down faulty rounded coordinates
+		AbsoluteLocation absLoc = v.getLocation().getAbsoluteLocation();
+		StringBuilder sb = new StringBuilder();
+		sb.append("ID: ").append(v.getId());
+		sb.append(" (").append(absLoc.getLatitude()).append(", ");
+		sb.append(absLoc.getLongitude()).append(", ");
+		sb.append((int)absLoc.getAltitude()).append(")");
+		String title = sb.toString();
+		
+		this.updateSelectedVertex(v, title, true);
+		
+		final int EDIT_LOCATION = 0;
+		final int MEASUREMENT = 1;
+					
+		final String[] items = new String[2];
+		items[EDIT_LOCATION] = "Edit Location";
+		items[MEASUREMENT] = "New Measurement";			
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Choose an action");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int item) {
+		        switch (item) {
+				case EDIT_LOCATION:
+					startEditSymbolicLocation(v.getId());
+					break;
+				case MEASUREMENT:
+					startWifiScanActivity(v.getId());
+					break;
+				default:
+					break;
+				}
+		    }
+
+			private void startEditSymbolicLocation(int vertexId) {
+				startActivity(new Intent(WebMap2DOffline.this, EditSymbolicLocation.class));      	
+        		
+			}
+
+			private void startWifiScanActivity(int vertexId) {						
+				startActivity(new Intent(WebMap2DOffline.this, WifiScanForm.class).putExtra(IS_LOCATION_BOUND, true));     	
+        		
+			}
+		});			
+		
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	/**
+	 * This method is called (from javascript) whenever the user taps on the map - not a marker. 
+	 * This captures the lat, lon coordinates of the selected location  
+	 * @param isOnline Indicates whether we are in the online phase (false)
+	 * @param floor the current floor
+	 * @param lat the latitude of the tapped location
+	 * @param lon the longitude of the tapped location
+	 */
+	@Override
+	public void setSelectedLocation(boolean isOnline, int floor, double lat, double lon) {
+		//TODO: Issue with no-showing marker maybe caused by too many decimals?		
+		
+		Vertex v = new Vertex(-1, new AbsoluteLocation(lat, lon, floor));
+		StringBuilder title = new StringBuilder();
+		title.append("Unbound: ").append(floor).append(";").append(lat).append("; ").append(lon);
+		
+		updateSelectedVertex(v, title.toString(), false);
+		JSInterface.showSelectedLocation(webView, lat, lon);
+	}
+	
+	public void updateSelectedVertex(Vertex selectedVertex, String title, boolean isBound)
+    {
+    	WebMap2DOffline.SelectedOfflineVertex = selectedVertex;
+    	this.isBoundLocation = isBound;
+    	
+    	Intent titleIntent = new Intent(HAS_TITLE_CHANGED);
+    	titleIntent.putExtra(WebMap2DOffline.INTENT_EXTRA_TITLE, title);
+    	sendBroadcast(titleIntent);
+    }
+	
+	/*
+	public void updateSniperOverlayRelatively(int x, int y) {
+		GeoPoint gp = null; //selectedPosition; //lat og lon i microdegrees
+		gp.getLatitudeE6() //Lat som microdegrees = degrees * 1E6
+		gp.getLongitudeE6() //Lon som microdegrees = degrees * 1E6
+		if(gp == null) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			
+			//gp = webView mapView.getProjection().fromPixels(metrics.widthPixels / 2, metrics.heightPixels / 2);
+		}
+		
+		Point pt = new Point(); //indeholder to int koordinater
+		mv.getProjection().toPixels(gp ,pt);
+		
+		gp = mv.getProjection().fromPixels(pt.x + x, pt.y + y);
+		
+		//onTap(gp, null);
+		//mv.invalidate();
+	}
+	*/
+}

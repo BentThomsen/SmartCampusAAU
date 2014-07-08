@@ -1,0 +1,9 @@
+package com.smartcampus.indoormodel;
+
+public class RelativeLocation extends Abstract3DLocation
+{
+    public RelativeLocation(int x, int y, int z)
+    {
+    	super(x, y, z);
+    }
+}

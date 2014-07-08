@@ -1,0 +1,90 @@
+package com.smartcampus.indoormodel;
+
+public class AggregateLocation {
+	private PixelLocation pixelLocation;
+	private RelativeLocation relativeLocation;
+	private SymbolicLocation symbolicLocation;
+	//This is a required location format. Used to uniquely identify a location
+	private AbsoluteLocation absoluteLocation;
+	
+	public AggregateLocation()
+	{
+		
+	}
+	
+	public AggregateLocation(AbsoluteLocation absoluteLocation)
+	{
+		this.absoluteLocation = absoluteLocation;
+	}
+	
+	public AggregateLocation(AbsoluteLocation absoluteLocation, RelativeLocation relativeLocation, SymbolicLocation symbolicLocation, PixelLocation pixelLocation)
+	{
+		this.absoluteLocation = absoluteLocation;
+		this.relativeLocation = relativeLocation;
+		this.symbolicLocation = symbolicLocation;
+		this.pixelLocation = pixelLocation;
+	}
+	
+	/*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     * We compare AggregateLocations by their absoluteLocation
+     * which is the only required location
+     */
+    @Override
+    public boolean equals(Object other)
+    {
+    	if (other == null)
+    		return false;
+    	
+    	if (!(other instanceof AggregateLocation))
+    		return false;
+    	
+    	AbsoluteLocation otherAbsLocation = ((AggregateLocation)other).getAbsoluteLocation();
+    	AbsoluteLocation thisAbsLocation = this.getAbsoluteLocation();
+    	return thisAbsLocation.equals(otherAbsLocation);    	
+    }
+	public AbsoluteLocation getAbsoluteLocation()
+	{
+		return this.absoluteLocation;
+	}
+	
+	public PixelLocation getPixelLocation()
+	{
+		return pixelLocation;
+	}
+	public RelativeLocation getRelativeLocation()
+	{
+		return relativeLocation;
+	}
+	
+	public SymbolicLocation getSymbolicLocation()
+	{
+		return symbolicLocation;
+	}
+	@Override
+    public int hashCode()
+    {
+    	return this.getAbsoluteLocation().hashCode();
+    }
+	
+	public void setAbsoluteLocation(AbsoluteLocation location)
+	{
+		this.absoluteLocation = location;
+	}
+	
+	public void setPixelLocation(PixelLocation location)
+	{
+		this.pixelLocation = location;
+	}
+	
+	public void setRelativeLocation(RelativeLocation location)
+	{
+		this.relativeLocation = location;
+	}
+    
+    public void setSymbolicLocation(SymbolicLocation location)
+	{
+		this.symbolicLocation = location;
+	}
+}

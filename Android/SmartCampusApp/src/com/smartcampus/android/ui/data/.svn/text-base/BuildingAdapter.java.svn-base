@@ -1,0 +1,79 @@
+package com.smartcampus.android.ui.data;
+
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.smartcampus.indoormodel.Building;
+
+public class BuildingAdapter extends BaseAdapter {
+	
+	public final class BuildingListView extends LinearLayout 
+	{
+		private TextView mNameTextView;
+		private TextView mAddressTextView;
+		
+		public BuildingListView(Context context, Building b) {
+			super(context);
+			
+			this.setOrientation(LinearLayout.VERTICAL);
+			LinearLayout.LayoutParams params = 
+				new LinearLayout.LayoutParams(
+						ViewGroup.LayoutParams.WRAP_CONTENT,
+						ViewGroup.LayoutParams.WRAP_CONTENT);
+			
+			mNameTextView = new TextView(context);
+			mNameTextView.setText(b.getName());
+			mNameTextView.setTextColor(Color.WHITE);
+			
+			mAddressTextView = new TextView(context);
+			mAddressTextView.setText(b.getMaxAddress() + "; " + b.getPostalCode() + "; " + b.getCountry());
+			mAddressTextView.setTextColor(Color.GRAY);
+			
+			this.addView(mNameTextView, params);
+			this.addView(mAddressTextView, params);		
+		}
+	}
+	//private static final String CLASSTAG = ReviewAdapter.class.getSimpleName();
+	private final Context context;
+	
+	
+	private List<Building> mBuildings;
+	
+	
+	public BuildingAdapter(Context context, List<Building> buildings) {
+	    this.context = context;   
+	    this.mBuildings = buildings; 	    
+	}
+	
+	@Override
+	public int getCount() {
+	    return mBuildings.size();
+	}
+	
+	@Override
+	public Building getItem(int position) {
+	    return this.mBuildings.get(position);
+	}
+	
+	@Override
+	public long getItemId(int position) {
+	    return position; //nothing special
+	}   
+	
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		Building b = this.mBuildings.get(position);
+	    return new BuildingListView(this.context, b);          
+	}
+}
+
+
+

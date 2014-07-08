@@ -1,0 +1,7 @@
+package com.smartcampus;
+
+import android.app.Application;
+
+public class SmartCampusApplication extends Application {
+
+}

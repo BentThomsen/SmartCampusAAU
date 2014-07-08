@@ -1,0 +1,37 @@
+package com.smartcampus.wifi;
+
+public class Histogram {
+
+	
+	private final int id;
+	private final String mac;
+	private final int value;
+	private final int count;
+		
+	public Histogram(int id, String mac, int value, int count) {
+		this.id = id;
+		this.mac = mac;
+		this.value = value;
+		this.count = count;
+	}
+	
+	public Histogram(String SSID, int value, int count) {
+		this(-1, SSID, value, count);
+	}
+	
+	public int getCount() {
+		return this.count;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public String getMac() {
+		return this.mac;
+	}
+	
+	public int getValue() {
+		return this.value;
+	}
+}

@@ -1,0 +1,70 @@
+package com.smartcampus.baselogic;
+
+/// <summary>
+/// Represents a streamspin service that can be started
+/// </summary>
+public class StartService
+{
+    /// <summary>
+    /// The streamspin service id
+    /// </summary>
+    private int serviceID;
+    /// <summary>
+    /// The name of the service
+    /// </summary>
+    private String name;
+    /// <summary>
+    /// The url to call when starting the service
+    /// </summary>
+    private String startUrl;
+
+    /// <summary>
+    /// Default constructor - nothing initialized
+    /// </summary>
+    public StartService()
+    {
+    }
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="name">The name of the service</param>
+    /// <param name="startUrl">The url to call when starting the service</param>
+    /// <param name="serviceID">The streamspin service id</param>
+    public StartService(String name, String startUrl, int serviceID)
+    {
+        this.name = name;
+        this.startUrl = startUrl;
+        this.serviceID = serviceID;
+    }
+    
+    /// <summary>
+    /// The name of the service
+    /// </summary>
+    public String GetName() {
+        return name;
+    }
+    /// <summary>
+    /// The streamspin service id
+    /// </summary>
+    public int GetServiceID() {
+        return serviceID;
+    }
+    
+    /// <summary>
+    /// The url to call when starting the service
+    /// </summary>
+    public String GetStartUrl() {
+    	return this.startUrl;    	
+    }
+    public void SetName(String value) {
+    	name = value; 
+    }
+
+    public void SetServiceID(int value) {
+        serviceID = value; 
+    }
+    public void SetStartUrl(String value) {
+    	this.startUrl = value;    	
+    }    
+}

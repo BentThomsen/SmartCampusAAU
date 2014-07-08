@@ -1,0 +1,204 @@
+package com.smartcampus.android.location.wifi.test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.smartcampus.android.location.wifi.AlgorithmHyperNNSS;
+import com.smartcampus.android.location.wifi.EstimateResult;
+import com.smartcampus.indoormodel.AbsoluteLocation;
+import com.smartcampus.indoormodel.AggregateLocation;
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.wifi.WifiMeasurement;
+
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
+public class AlgorithmHyperNNSS_Test extends TestCase {
+	
+	private WifiMeasurement online;
+	private Vertex
+		v_identical, v_minus15, v_minus30, v_plus15, v_plus30,
+		v_closeSkew, v_identicalButMissingMac, v_identicalButMissingTwoMacs,
+		v_largeDiff, v_hlf;
+	
+	public AlgorithmHyperNNSS_Test() {
+		super();
+	}
+	
+	@Override
+	public void setUp()
+	{
+		final String mac1 = "mac1";
+		final String mac2 = "mac2";
+		final String mac3 = "mac3";
+		final String mac4 = "mac4";
+		
+		online = new WifiMeasurement();		
+		online.addValue(mac1, -40);
+		online.addValue(mac2, -50);
+		online.addValue(mac3, -60);
+		online.addValue(mac4, -70);
+		
+		v_identical = new Vertex(290, new AbsoluteLocation(1, 2, 0));
+		WifiMeasurement offline1 = new WifiMeasurement();		
+		//This measurement is identical to the online meas.
+		offline1.addValue(mac1, -40);
+		offline1.addValue(mac2, -50);
+		offline1.addValue(mac3, -60);
+		offline1.addValue(mac4, -70);
+		v_identical.addFingerprint(offline1);		
+				
+		v_minus30 = new Vertex(291, new AbsoluteLocation(2, 3, 0));
+		WifiMeasurement offline2 = new WifiMeasurement();		
+		//This measurement is off by a total of -40, but has the same ratio as the online meas.
+		offline2.addValue(mac1, -30);
+		offline2.addValue(mac2, -40);
+		offline2.addValue(mac3, -50);
+		offline2.addValue(mac4, -60);
+		v_minus30.addFingerprint(offline2);
+		
+		v_plus30 = new Vertex(292, new AbsoluteLocation(3, 4, 1));
+		WifiMeasurement offline3 = new WifiMeasurement();		
+		//This measurement is off by a total of 40, but has the same ratio as the online meas.
+		offline3.addValue(mac1, -50);
+		offline3.addValue(mac2, -60);
+		offline3.addValue(mac3, -70);
+		offline3.addValue(mac4, -80);
+		v_plus30.addFingerprint(offline3);		
+		
+		v_closeSkew = new Vertex(293, new AbsoluteLocation(4, 5, 1));
+		WifiMeasurement offline4 = new WifiMeasurement();	
+		//This measurement is off by a total of 8 - so pretty damn close
+		//However, the ratio is "skewed"
+		offline4.addValue(mac1, -42);
+		offline4.addValue(mac2, -48);
+		offline4.addValue(mac3, -62);
+		offline4.addValue(mac4, -68);
+		v_closeSkew.addFingerprint(offline4);
+		
+		v_identicalButMissingMac = new Vertex(294, new AbsoluteLocation(5, 6, 0));
+		WifiMeasurement offline5 = new WifiMeasurement();	
+		//This measurement is identical to the online measurement, but missing one ap
+		offline5.addValue(mac1, -40);
+		offline5.addValue(mac2, -50);
+		offline5.addValue(mac3, -60);
+		v_identicalButMissingMac.addFingerprint(offline5);
+		
+		v_identicalButMissingTwoMacs = new Vertex(295, new AbsoluteLocation(6, 7, 1));
+		WifiMeasurement offline8 = new WifiMeasurement();	
+		//This measurement is identical to the online measurement, but missing two aps
+		offline8.addValue(mac1, -40);
+		offline8.addValue(mac2, -50);
+		v_identicalButMissingTwoMacs.addFingerprint(offline8);
+		
+		
+		v_minus15 = new Vertex(296, new AbsoluteLocation(7, 8, 0));
+		WifiMeasurement offline6 = new WifiMeasurement();		
+		//This measurement is off by -15, but has the same ratio as the online meas.
+		offline6.addValue(mac1, -35);
+		offline6.addValue(mac2, -45);
+		offline6.addValue(mac3, -55);
+		offline6.addValue(mac4, -65);
+		v_minus15.addFingerprint(offline6);
+		
+		v_plus15 = new Vertex(297, new AbsoluteLocation(8, 9, 1));
+		WifiMeasurement offline7 = new WifiMeasurement();		
+		//This measurement is off by -15, but has the same ratio as the online meas.
+		offline7.addValue(mac1, -45);
+		offline7.addValue(mac2, -55);
+		offline7.addValue(mac3, -65);
+		offline7.addValue(mac4, -75);
+		v_plus15.addFingerprint(offline7);
+		
+		v_largeDiff = new Vertex(298, new AbsoluteLocation(9, 10, 0));
+		WifiMeasurement offline9 = new WifiMeasurement();		
+		//This measurement is off by a total of 40, but has the same ratio as the online meas.
+		offline9.addValue(mac1, -10);
+		offline9.addValue(mac2, -50);
+		offline9.addValue(mac3, -100);
+		offline9.addValue(mac4, -150);
+		v_largeDiff.addFingerprint(offline9);	
+		
+		
+		v_hlf = new Vertex(299, new AbsoluteLocation(10, 11, 1));
+		WifiMeasurement offline10 = new WifiMeasurement();		
+		//This measurement is off by a total of 40, but has the same ratio as the online meas.
+		offline10.addValue(mac1, -82);
+		offline10.addValue(mac2, -62);
+		offline10.addValue(mac3, -85);
+		offline10.addValue(mac4, -100);
+		v_hlf.addFingerprint(offline10);	
+	}
+
+	/*
+	public void testCompare() {
+		fail("Not yet implemented");
+	}
+	*/
+
+	public void testConstructHyperRepresentation1() {
+				
+		List<Vertex> offlineVertices = new ArrayList<Vertex>();
+		//v_identical, v_minus30, v_plus30, v_closeSkew, v_identicalButMissingMac
+		offlineVertices.add(v_identicalButMissingTwoMacs);
+		offlineVertices.add(v_identicalButMissingMac);
+		offlineVertices.add(v_closeSkew);
+		offlineVertices.add(v_minus30);
+		offlineVertices.add(v_minus15);
+		offlineVertices.add(v_plus30);
+		offlineVertices.add(v_plus15);		
+		offlineVertices.add(v_identical);
+				
+		AlgorithmHyperNNSS alg = new AlgorithmHyperNNSS();
+		EstimateResult res = alg.compare(offlineVertices, online);
+		
+		Assert.assertEquals(res.getVertex(), v_identical);	
+	}
+	
+	public void testConstructHyperRepresentation2() {
+		
+		List<Vertex> offlineVertices = new ArrayList<Vertex>();
+		//v_identical, v_minus30, v_plus30, v_closeSkew, v_identicalButMissingMac
+		offlineVertices.add(v_minus30);
+		offlineVertices.add(v_plus30);
+		offlineVertices.add(v_closeSkew);
+		offlineVertices.add(v_identicalButMissingMac);
+				
+		AlgorithmHyperNNSS alg = new AlgorithmHyperNNSS();
+		EstimateResult res = alg.compare(offlineVertices, online);
+		
+		Assert.assertEquals(res.getVertex(), v_minus30);	
+	} 
+
+	public void testConstructHyperRepresentation() {
+		
+		boolean truth;
+		truth = viewHyper(online);
+		truth = viewHyper(v_hlf.getFingerPrints().get(0));
+		truth = viewHyper(v_largeDiff.getFingerPrints().get(0));
+		truth = viewHyper(v_closeSkew.getFingerPrints().get(0));
+		truth = viewHyper(v_minus15.getFingerPrints().get(0));
+		truth = viewHyper(v_minus30.getFingerPrints().get(0));
+		truth = viewHyper(v_plus15.getFingerPrints().get(0));
+		truth = viewHyper(v_plus30.getFingerPrints().get(0));
+		truth = viewHyper(v_minus30.getFingerPrints().get(0));
+		truth = viewHyper(v_identical.getFingerPrints().get(0));
+				
+		//truth = viewHyper(v_identicalButMissingMac.getFingerPrints().get(0));
+		
+		
+		Assert.assertTrue(truth);	
+	}
+	
+	private boolean viewHyper(WifiMeasurement meas)
+	{
+		WifiMeasurement hyper = AlgorithmHyperNNSS.constructHyperRepresentation(meas);
+		int val1 = hyper.getAvgDbM("mac1_mac2");
+		int val2 = hyper.getAvgDbM("mac1_mac3");
+		int val3 = hyper.getAvgDbM("mac1_mac4");
+		int val4 = hyper.getAvgDbM("mac2_mac3");
+		int val5 = hyper.getAvgDbM("mac2_mac4");
+		int val6 = hyper.getAvgDbM("mac3_mac4");
+		return val1 > 0 && val2 > 0 && val3 > 0 && val4 > 0 && val5 > 0 && val6 > 0;
+	}
+}

@@ -1,0 +1,11 @@
+package com.smartcampus.webclient;
+
+public class ConnectionInfo {
+	//- Virtual CS-IT server: http://smartcampusaau.cs.aau.dk/RadioMapService/RadioMapService.svc/
+	//- Physical server: http://smartcampus.cs.aau.dk/RadioMapService/RadioMapService.svc/
+	//- Azure: http://smartcampus.cloudapp.net/RadioMapService.svc/
+	//- Virtual CS-IT with SnifferMeasurements: http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/
+	public static final String SMARTCAMPUS_SERVICE_ROOT_URI = "http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/";
+
+	public static final String SMARTCAMPUS_SNIFFER_SERVICE_URI = "http://smartcampus.cs.aau.dk/WifiSnifferPositioningService/SnifferService.svc/";
+}

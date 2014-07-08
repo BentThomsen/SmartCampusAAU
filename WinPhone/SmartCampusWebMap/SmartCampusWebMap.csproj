@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{28E03846-BAA2-4D53-8928-7BAD02BC81AF}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SmartCampusWebMap</RootNamespace>
+    <AssemblyName>SmartCampusAAU</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>SmartCampusAAU.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>SmartCampusWebMap.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls.Maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e" />
+    <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Xna.Framework" />
+    <Reference Include="System.Data.Services.Client, Version=7.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+    <Reference Include="mscorlib.extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Javascript\DeviceInterface.cs" />
+    <Compile Include="Javascript\JavascriptParser.cs" />
+    <Compile Include="Javascript\JSInterface.cs" />
+    <Compile Include="Library\Baselogic\DistanceMeasurements.cs" />
+    <Compile Include="Library\Location\LocationService.cs" />
+    <Compile Include="Library\ModelExtensions\Indoormodel\BuildingExtension.cs" />
+    <Compile Include="Library\ModelExtensions\Indoormodel\Graph\VertexExtension.cs" />
+    <Compile Include="Service References\RadiomapBackend\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.datasvcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\WifiSnifferPositioningService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.datasvcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\About\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\About\HowItWorks.xaml.cs">
+      <DependentUpon>HowItWorks.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Dialogs\SaveMacAddress.xaml.cs">
+      <DependentUpon>SaveMacAddress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Dialogs\SelectBuildingFloor.xaml.cs">
+      <DependentUpon>SelectBuildingFloor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Dialogs\SelectEdgeType.xaml.cs">
+      <DependentUpon>SelectEdgeType.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Dialogs\SetTracking.xaml.cs">
+      <DependentUpon>SetTracking.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Maps\MarkerConfig.cs" />
+    <Compile Include="Ui\Maps\Offline\Graph\UiBing_Map2DEditLinks.xaml.cs">
+      <DependentUpon>UiBing_Map2DEditLinks.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Offline\Graph\EditGraph.xaml.cs">
+      <DependentUpon>EditGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Maps\Offline\Graph\Map2DEditLinks.cs" />
+    <Compile Include="Ui\Maps\Offline\TileSystem.cs" />
+    <Compile Include="Ui\Maps\Offline\UI_OfflineBingMap.xaml.cs">
+      <DependentUpon>UI_OfflineBingMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Maps\Online\UI_OnlineBingMap.xaml.cs">
+      <DependentUpon>UI_OnlineBingMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Dialogs\OfflineOnTapAction.xaml.cs">
+      <DependentUpon>OfflineOnTapAction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Globals.cs" />
+    <Compile Include="Ui\Dialogs\SelectProvider.xaml.cs">
+      <DependentUpon>SelectProvider.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Dialogs\ShowNearbyPoi.xaml.cs">
+      <DependentUpon>ShowNearbyPoi.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Offline\Graph\EditSymbolicLocation.xaml.cs">
+      <DependentUpon>EditSymbolicLocation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Maps\Online\UI_OnlineGoogleMap.xaml.cs">
+      <DependentUpon>UI_OnlineGoogleMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ui\Offline\Wifi\WifiScanForm.xaml.cs">
+      <DependentUpon>WifiScanForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Maps\Map2D.cs" />
+    <Compile Include="Ui\Maps\Offline\UI_OfflineGoogleMap.xaml.cs">
+      <DependentUpon>UI_OfflineGoogleMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Maps\Offline\Map2DOffline.cs" />
+    <Compile Include="Ui\Maps\Online\Map2DOnline.cs" />
+    <Compile Include="Library\Webclient\ConcreteWebClient.cs" />
+    <Compile Include="Library\Webclient\ConnectionInfo.cs" />
+    <Compile Include="Library\Webclient\IWebClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="Ui\About\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\About\HowItWorks.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Dialogs\SaveMacAddress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Dialogs\SelectBuildingFloor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Dialogs\SelectEdgeType.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Dialogs\SetTracking.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Maps\Offline\Graph\UiBing_Map2DEditLinks.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Offline\Graph\EditGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Maps\Offline\UI_OfflineBingMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Maps\Online\UI_OnlineBingMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Dialogs\OfflineOnTapAction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Dialogs\SelectProvider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Dialogs\ShowNearbyPoi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Offline\Graph\EditSymbolicLocation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Maps\Online\UI_OnlineGoogleMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Maps\Offline\UI_OfflineGoogleMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Offline\Wifi\WifiScanForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\WMAppManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RadiomapBackend\service.edmx" />
+    <None Include="Service References\WifiSnifferPositioningService\service.edmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ApplicationIcon_AAU_62.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\drawable-ldpi\ic_menu_measure.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_nearby.png" />
+    <Content Include="SplashScreenImage.jpg" />
+    <Resource Include="Images\drawable-hdpi\dpad_down_arrow_default.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\drawable-hdpi\dpad_left_arrow_default.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\drawable-hdpi\dpad_right_arrow_default.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\drawable-hdpi\dpad_up_arrow_default.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\drawable-hdpi\foliapin.png" />
+    <Resource Include="Images\drawable-hdpi\tracking_off.png" />
+    <Content Include="Background_AAU_173.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\drawable-hdpi\ic_defibrellator.png" />
+    <Content Include="Images\drawable-hdpi\ic_des_flag.png" />
+    <Content Include="Images\drawable-hdpi\ic_elevator.png" />
+    <Content Include="Images\drawable-hdpi\ic_entrance.png" />
+    <Content Include="Images\drawable-hdpi\ic_fireexstinguisher.png" />
+    <Content Include="Images\drawable-hdpi\ic_food.png" />
+    <Content Include="Images\drawable-hdpi\ic_lecture_room.png" />
+    <Content Include="Images\drawable-hdpi\ic_moving_walkway.png" />
+    <Content Include="Images\drawable-hdpi\ic_person.png" />
+    <Content Include="Images\drawable-hdpi\ic_staircase.png" />
+    <Content Include="Images\drawable-hdpi\ic_toilet.png" />
+    <Content Include="Images\drawable-hdpi\ic_vertex_information.png" />
+    <Content Include="Images\drawable-hdpi\ic_vertex_no_information.png" />
+    <Content Include="Images\drawable-hdpi\star-3.png" />
+    <Content Include="Images\drawable-ldpi\compass.png" />
+    <Content Include="Images\drawable-ldpi\icon.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_add_link.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_change_floor.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_choose_provider.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_clear_route.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_edit_graph.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_find_nearest.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_off.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_offline.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_on.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_online.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_on_off.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_provider_auto.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_provider_gps.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_provider_none.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_provider_wifi.png" />
+    <Content Include="Images\drawable-ldpi\ic_menu_remove_link.png" />
+    <Resource Include="Images\drawable\aau_logo.png" />
+    <Resource Include="Images\drawable\eu_logo.jpeg" />
+    <Resource Include="Images\drawable\folia_logo.png" />
+    <None Include="Service References\RadiomapBackend\Reference.datasvcmap">
+      <Generator>DataServicesCoreClientGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Images\drawable\aqua-sphere-blue.png" />
+    <Resource Include="Images\drawable\mapIconsCollection.png" />
+    <Content Include="Images\drawable\sniper48.png" />
+    <Content Include="Images\standard\dark\appbar.save.rest.png" />
+    <Content Include="Images\standard\dark\appbar.transport.play.rest.png" />
+    <Content Include="Images\standard\dark\appbar.transport.stop.rest.png" />
+    <Content Include="Images\standard\light\appbar.save.rest.png" />
+    <Content Include="Images\standard\light\appbar.transport.play.rest.png" />
+    <Content Include="Images\standard\light\appbar.transport.stop.rest.png" />
+    <None Include="Service References\WifiSnifferPositioningService\Reference.datasvcmap">
+      <Generator>DataServicesCoreClientGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Images\standard\system-icon-location.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ServiceReferenceMetadataStorage Include="Service References\RadiomapBackend\">
+      <Type>datasvcmap</Type>
+    </ServiceReferenceMetadataStorage>
+    <ServiceReferenceMetadataStorage Include="Service References\WifiSnifferPositioningService\">
+      <Type>datasvcmap</Type>
+    </ServiceReferenceMetadataStorage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions />
+</Project>

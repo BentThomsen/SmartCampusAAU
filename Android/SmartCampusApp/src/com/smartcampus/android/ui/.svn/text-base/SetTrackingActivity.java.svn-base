@@ -1,0 +1,56 @@
+package com.smartcampus.android.ui;
+
+import com.smartcampus.R;
+import com.smartcampus.android.location.LocationService;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
+
+public class SetTrackingActivity extends Activity {
+	private static final String PREFS_NAME = "SmartCampusAAUPrefs";
+
+	CheckBox allowTrackingCheckbox;
+	TextView guidTextView;
+	
+	protected void onCreate(android.os.Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		//TODO: Set proper content view
+		setContentView(R.layout.set_tracking);	
+		allowTrackingCheckbox = (CheckBox)findViewById(R.id.allowTrackingCheckbox);  
+		guidTextView = (TextView)findViewById(R.id.guidTextView);
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	    
+		//Determine whether tracking is allowed
+		final String key_isTrackingAllowedKey = "key_isTrackingAllowed";
+		boolean isTrackingAllowed = settings.getBoolean(key_isTrackingAllowedKey, false);
+	    LocationService.setTrackingAllowed(isTrackingAllowed);
+		allowTrackingCheckbox.setChecked(isTrackingAllowed);
+	    allowTrackingCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				SharedPreferences.Editor editor = settings.edit();
+		    	editor.putBoolean(key_isTrackingAllowedKey, isChecked);
+		    	editor.commit();				
+		    	LocationService.setTrackingAllowed(isChecked);
+			}
+		});
+	    
+	    //Display the anonymous id
+	    final String key_clientId = "key_clientId";
+	    String savedClientId = settings.getString(key_clientId, null);
+	    if (savedClientId == null)
+	    {
+	    	SharedPreferences.Editor editor = settings.edit();
+	    	//getClient() will generate a UUID if LocationsService's clientId is null or empty
+	    	savedClientId = LocationService.getClientId();
+	    	editor.putString(key_clientId, savedClientId);
+	        editor.commit();
+	    }
+	    LocationService.setClientId(savedClientId);	
+	    guidTextView.setText(savedClientId);	    
+	};
+}

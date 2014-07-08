@@ -1,0 +1,61 @@
+﻿<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="1.0">
+    <Schema Namespace="WifiSnifferPositioningService" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2007/05/edm">
+      <EntityType Name="PositionEstimate">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Building_ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="VertexID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Latitude" Type="Edm.Double" Nullable="false" />
+        <Property Name="Longitude" Type="Edm.Double" Nullable="false" />
+        <Property Name="Altitude" Type="Edm.Double" Nullable="false" />
+        <Property Name="Provider" Type="Edm.String" Nullable="true" />
+        <Property Name="Time" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Accuracy" Type="Edm.Double" Nullable="false" />
+        <Property Name="Speed" Type="Edm.Double" Nullable="false" />
+        <Property Name="Bearing" Type="Edm.Double" Nullable="false" />
+        <Property Name="HasAccuracy" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="HasSpeed" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="HasBearing" Type="Edm.Boolean" Nullable="false" />
+      </EntityType>
+      <EntityContainer Name="SnifferModel" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="PositionEstimates" EntityType="WifiSnifferPositioningService.PositionEstimate" />
+        <FunctionImport Name="GetPosition" EntitySet="PositionEstimates" ReturnType="WifiSnifferPositioningService.PositionEstimate" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="TestIt" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="StartMeasuringAtBoundLocation" ReturnType="Edm.Boolean" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+          <Parameter Name="buildingId" Type="Edm.Int32" Mode="In" />
+          <Parameter Name="vertexId" Type="Edm.Int32" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="StartMeasuringAtUnboundLocation" ReturnType="Edm.Boolean" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+          <Parameter Name="buildingId" Type="Edm.Int32" Mode="In" />
+          <Parameter Name="latE6" Type="Edm.Int32" Mode="In" />
+          <Parameter Name="lonE6" Type="Edm.Int32" Mode="In" />
+          <Parameter Name="alt" Type="Edm.Int32" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="StartWifiPositioning" ReturnType="Edm.Boolean" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="StopMeasuring" ReturnType="Edm.Boolean" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="SaveMeasurement" ReturnType="Edm.Int32" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="StopWifiPositioning" ReturnType="Edm.Boolean" m:HttpMethod="GET">
+          <Parameter Name="clientMac" Type="Edm.String" Mode="In" />
+        </FunctionImport>
+        <FunctionImport Name="TestGetRandomPosition" EntitySet="PositionEstimates" ReturnType="WifiSnifferPositioningService.PositionEstimate" m:HttpMethod="GET">
+          <Parameter Name="buildingId" Type="Edm.Int32" Mode="In" />
+        </FunctionImport>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

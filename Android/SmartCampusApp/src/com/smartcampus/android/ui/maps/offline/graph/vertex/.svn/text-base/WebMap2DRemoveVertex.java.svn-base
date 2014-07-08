@@ -1,0 +1,214 @@
+package com.smartcampus.android.ui.maps.offline.graph.vertex;
+
+import java.util.List;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.smartcampus.R;
+import com.smartcampus.android.ui.Globals;
+import com.smartcampus.android.ui.maps.WebMap2D;
+import com.smartcampus.indoormodel.graph.Vertex;
+import com.smartcampus.webclient.IWebClient;
+import com.smartcampus.webclient.JsonWebClient;
+
+public class WebMap2DRemoveVertex extends WebMap2D {
+    
+	//This denotes the vertex that is about to the deleted 
+	//(i.e., moved to the special VertexGraveyard building)
+	private static Vertex mCurrentVertex;
+
+	
+	//Form: AsyncTask<[Input Parameter Type], [Progress Report Type], [Result Type]>
+	private class DeleteVertexTask extends AsyncTask<Void, Void, Boolean>
+    {
+		private IWebClient mWebClient = new JsonWebClient(); //Skal vist vaere Json
+		private String errorMsg = "Ok";
+				
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			if (mCurrentVertex == null)
+			{
+				errorMsg = "Vertex is null";
+				return false;
+			}
+			
+			try
+			{
+				//WebMap2DRemoveVertex.addVertexToGraveYard(mCurrentVertex.getId(),	mCurrentBuilding.getBuildingID());
+				mWebClient.addVertexToGraveYard(mCurrentVertex.getId(),	mCurrentBuilding.getBuildingID());
+			}
+			catch (Exception ex)
+			{
+				if (ex.getCause() != null)
+					errorMsg = ex.getCause().getMessage();
+				else
+					errorMsg = ex.getMessage();
+				return false;
+			}
+			return true;  
+		}
+		
+		protected void onPostExecute(Boolean success)
+		{
+			if (!success)
+			{
+				Globals.createErrorDialog(WebMap2DRemoveVertex.this, "Error", errorMsg).show();
+			}
+			else
+			{
+				//The graph removes the vertex' incidentEdges as well.
+				mGraph.removeVertex(mCurrentVertex);
+	
+				Toast.makeText(WebMap2DRemoveVertex.this, "Vertex deleted!", Toast.LENGTH_SHORT).show();
+			}
+			refreshUI();
+		}		
+    }	
+	
+	@Override
+	protected boolean addCurrentFloorToFloorChangerDialog() {
+		return false;
+	}
+	
+	private void addVertexToVertexGraveyard(int vertexID)
+	{
+		if (mGraph == null)
+			return;
+		
+		mCurrentVertex = mGraph.getVertexById(vertexID);
+		if (mCurrentVertex == null)
+			return;
+		
+	    Toast.makeText(this, "Deleting vertex...", Toast.LENGTH_SHORT).show();
+ 	    new DeleteVertexTask().execute();		
+	}
+	
+	public AlertDialog createRemoveVertexConfirmationDialog(int vertexId)
+	{
+		final int vertexDeleteId = vertexId;
+		//Prompt the user
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you absolutely sure you want to delete the location and its measurements?")
+		       .setCancelable(false)
+		       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		               addVertexToVertexGraveyard(vertexDeleteId); 		        	   
+		           }
+		       })
+		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		               dialog.cancel();
+		           }
+		       });
+		return builder.create();
+	}
+	
+	@Override
+	public int getCurrentFloor() {
+		return mCurrentSelectedFloor;
+	}
+	
+	@Override
+	protected List<Vertex> getVisibleVertices(List<Vertex> vertices) {
+		//show everything, so just pass through
+		return vertices;
+	}
+	
+	@Override
+	public void onCreate(android.os.Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);            
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.map2d_remove_vertex_menu, menu);
+		
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    	
+		switch (item.getItemId())
+    	{
+    	case R.id.remove_vertex_floor_changer:
+    		AlertDialog alert = createFloorChangerDialog();
+        	alert.show();
+            return true;
+    	case R.id.remove_vertex_what_is_here:
+    		AlertDialog nearbyPlacesDialog = createWhatsNearbyDialog();
+        	nearbyPlacesDialog.show();
+            return true;
+    	}
+    	return super.onMenuItemSelected(featureId, item);
+    	
+    }
+	
+	@Override
+	public void onTap(int floorNum, int vertexId) {
+		//Do you want to delete the selected vertex?
+		createRemoveVertexConfirmationDialog(vertexId).show();
+	}
+	
+	@Override
+	public void setSelectedLocation(boolean isOnline, int floor, double lat,
+			double lon) {		
+	}
+	
+	/*
+	public static void addVertexToGraveYard(int vertexId, int buildingId) throws Exception {		
+		String url = ConnectionInfo.SMARTCAMPUS_SERVICE_ROOT_URI + "AddToVertexGraveyard?buildingId=" + buildingId + "&vertexId=" + vertexId;
+		//A succesful request returns 204, so there is no json response to parse
+		OpenHttpConnection(url);		
+	}
+	
+	public static String OpenHttpConnection(String urlString) throws Exception
+	 {
+	     InputStream in = null;
+	     int response = -1;
+	     StringBuilder builder = new StringBuilder();			
+	     String res = null;
+	     
+	     URL url = new URL(urlString); 
+	     URLConnection conn = url.openConnection();
+	              
+	     if (!(conn instanceof HttpURLConnection))                     
+	         throw new IOException("Not an HTTP connection");	     
+	     
+	     try{
+	         HttpURLConnection httpConn = (HttpURLConnection) conn;
+	         httpConn.setAllowUserInteraction(false);
+	         httpConn.setInstanceFollowRedirects(true);
+	         httpConn.setRequestMethod("GET");
+	         //NOTE: Setting the accept header to 'application/json' is a must!
+	         httpConn.setRequestProperty("accept", "application/json");
+	         httpConn.connect(); 
+
+	         response = httpConn.getResponseCode();                 
+	         if (response == HttpURLConnection.HTTP_OK) {
+	        	 in = httpConn.getInputStream();   
+	             
+	             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				 String line;
+	             while ((line = reader.readLine()) != null) {
+	            	 builder.append(line);
+	             }
+	             res = builder.toString();
+	         }
+	     }
+	     catch (Exception ex)
+	     {
+	         throw ex;            
+	     }
+	     return res;     
+	 }
+	 */
+}

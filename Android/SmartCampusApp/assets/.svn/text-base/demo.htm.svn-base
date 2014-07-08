@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0 }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
+<script type="text/javascript">
+
+
+   var map;
+   var marker;
+   var floor = "l3";
+   var maptiler;
+   var items = [];
+   var online = false;
+   var altitude = null;
+   var c = 0;
+   var _checkLocation = false;
+   var currentMarker = null;
+   var editMarker;
+
+
+//custom
+
+function add(){
+
+  var vertex = [
+                {latitude:57.435555,longitude:10.532027,title:"Vertex 1",floor:1,id:12},
+                {latitude:57.433555,longitude:10.536027,title:"Vertex 2",floor:1,id:23}
+               ]
+  addGraphOverlay(12,true,vertex);
+}
+
+
+function checkLocation(){
+  if(_checkLocation == false){
+    _checkLocation = true;
+    document.getElementById("location").value = "Show location off";
+  }else{
+    _checkLocation = false;
+    document.getElementById("location").value = "Show location on";
+    c = 0;
+    currentMarker.setMap(null);
+  }
+}
+
+
+function clearOverlays()
+{
+    //fjern alle overlays, dvs. alle POI markører der måtte være vist for nuværende etage.
+    for(var i = 0 ; i<items.length ; i++){
+      //måske check på floor levels
+      items[i].setMap(null);
+    }
+    items.length = 0;
+}
+
+//add vertex layer
+function addGraphOverlay(alt,isOnline,vertex)
+{
+   online = isOnline;
+   altitude = alt;
+  //vis alle overlays (POI markører) for den angivne etage (* se kommentar)
+   for(var i = 0 ; i<vertex.length ; i++){
+     items.push(addMarker(vertex[i]));
+   }
+}
+
+//add marker to the map
+function addMarker(vertexItem){
+     marker = new google.maps.Marker({
+        position: new google.maps.LatLng(vertexItem.latitude,vertexItem.longitude),
+        map: map,
+        title:vertexItem.title
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+        //console.log(vertexItem.id);
+        try { window.JSInterface.onTap(online,altitude,vertexItem.id); } catch(onTabError){console.log(onTabError);}
+      });
+  return marker;
+}
+//* Jeg kan lave et array bestående af objekter med følgende info: Title, Description, Url, Latitude, Longitude, Altitude, Type (et tal som bruges til at vælge rette ikon).
+
+function updateNewLocation(location)
+{
+   //toogle knap som viser current location.
+   if(_checkLocation){
+     document.getElementById("location").value = "Show location off " + c;
+
+     if(currentMarker == null){
+       currentMarker = new google.maps.Marker({
+        position: new google.maps.LatLng(location.latitude,location.longitude),
+        map: map,
+        title:"Hello World!"
+        });
+     } else{
+       currentMarker.setPosition(new google.maps.LatLng(location.latitude,location.longitude));
+     }
+
+
+     c++;
+   }
+}
+
+
+
+  function changeFloor(k){
+    floor = k.level;
+    map.overlayMapTypes.removeAt(0, maptiler);
+    map.overlayMapTypes.insertAt(0, maptiler);
+  }
+
+
+
+
+   function initialize() {
+
+
+      editMarker = new google.maps.Marker({title:"Hello World!"});
+
+
+
+
+      var frh = new google.maps.LatLng(57.437555,10.534027);
+
+      var myOptions = {
+        zoom: 18,
+        center: frh,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        streetViewControl: false
+      };
+
+      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+      //marker = new google.maps.Marker({
+      //  position: frh,
+      //  map: map,
+      //  title:"Hello World!"
+      //});
+
+
+      maptiler = new google.maps.ImageMapType({
+      getTileUrl: function(coord, zoom) {
+          var url = "http://foliastorage.s3.amazonaws.com/tiles/indoor/"+floor+"/z" + zoom + "/x" +coord.x+ "/y" + coord.y + ".png";
+          return url;
+      },
+      tileSize: new google.maps.Size(256, 256),
+        isPng: true
+      });
+
+
+      map.overlayMapTypes.insertAt(0, maptiler);
+
+      google.maps.event.addListener(map, 'click', function(event) {
+         editMarker.setOptions({position: event.latLng ,map: map});
+         var obj = {online:online,floor:altitude,lat:event.latLng.lat(),lng:event.latLng.lng()}
+         window.JSInterface.setSelectedLocation(online,altitude,event.latLng.lat(),event.latLng.lng());
+      });
+
+
+
+    }
+    </script>
+
+</head>
+
+
+
+<body onload="initialize();">
+<!--<input type="button" onclick="add()" value="Add vertex"/> &nbsp; <input type="button" onclick="clearOverlays()" value="clearOverlays"/> &nbsp;--><input type="button" onclick="checkLocation()" id="location" value="Show location on"/>
+<div id="map_canvas" style="width:100%; height:100%"></div>
+<div id="log"></div>
+</body>
+
+</html>

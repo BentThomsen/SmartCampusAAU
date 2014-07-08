@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="aacc1e80-61b5-46c4-b376-18b97a562e5a" xmlns="urn:schemas-microsoft-com:xml-dataservicemap">
+  <MetadataSources>
+    <MetadataSource Address="http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.edmx" MetadataType="Edmx" ID="3f658120-2805-4543-8061-23c4606c51a6" SourceId="1" SourceUrl="http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/" />
+  </Metadata>
+  <Extensions />
+</ReferenceGroup>

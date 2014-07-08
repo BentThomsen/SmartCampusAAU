@@ -1,0 +1,41 @@
+package com.smartcampus.android.wifi;
+
+import com.smartcampus.wifi.WifiMeasurement;
+
+/**
+ * 
+ * @author rhansen
+ * Usage:
+ * 0. Enable wifi.
+ * 1. startMeasuring()
+ * 2. stopMeasuring()
+ * 3. getLastMeasurement()
+ */
+public interface IWifiMeasurementBuilder {
+	/**
+	 * Starts a scan.
+	 */
+	public void startMeasuring();	
+	/**
+	 * Stops an ongoing scan
+	 */
+	public void stopMeasuring();
+	/**
+	 * @return Is a measurement in progress
+	 */
+	public boolean isMeasuring();
+	/**
+	 * @return The last measurement. null if no measurement has been taken yet or since stopMeasuring().
+	 * The scanning will be stopped (i.e., make sure you call stopMeasuring internally)
+	 */
+	public WifiMeasurement getLastMeasurement();
+	/**
+	 * Tries to enable wifi by turning on the wifi adapter.
+	 * @return Reports on the success of trying to turn on the wifi adapter.
+	 */
+	public boolean enableWifi();
+	/**
+	 * @return Reports whether wifi is enabled.
+	 */
+	public boolean isWifiEnabled();
+}

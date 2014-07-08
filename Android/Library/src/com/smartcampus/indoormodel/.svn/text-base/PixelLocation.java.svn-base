@@ -1,0 +1,13 @@
+package com.smartcampus.indoormodel;
+
+/// <summary>
+/// This class represents the pixel coordinates of a given location. 
+/// The Z value indicates the floor
+/// </summary>
+public class PixelLocation extends Abstract3DLocation
+{
+    public PixelLocation(int x, int y, int z)
+    {
+    	super(x, y, z);
+    }
+}

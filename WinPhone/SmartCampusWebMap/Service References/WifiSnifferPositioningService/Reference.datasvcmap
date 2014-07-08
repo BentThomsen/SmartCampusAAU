@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4e2d4aa6-1aaf-4ef6-bcc2-c0dd9549bbe1" xmlns="urn:schemas-microsoft-com:xml-dataservicemap">
+  <MetadataSources>
+    <MetadataSource Address="http://smartcampus.cs.aau.dk/WifiSnifferPositioningService/SnifferService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.edmx" MetadataType="Edmx" ID="5fcd7466-cff0-4ca7-b273-6ac46b489b43" SourceId="1" SourceUrl="http://smartcampus.cs.aau.dk/WifiSnifferPositioningService/SnifferService.svc" />
+  </Metadata>
+  <Extensions />
+  <Parameters>
+    <Parameter Name="ClientAssemblyReference" Value="C:\Program Files\Microsoft SDKs\Microsoft Data Framework\Phone\v7.1\bin\System.Data.Services.Client.dll" />
+    <Parameter Name="UseDataServiceCollection" Value="true" />
+    <Parameter Name="Version" Value="2.0" />
+  </Parameters>
+</ReferenceGroup>

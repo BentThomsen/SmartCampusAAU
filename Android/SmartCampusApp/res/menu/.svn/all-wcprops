@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu
+END
+menu_choose_building_floor.xml
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/menu_choose_building_floor.xml
+END
+map2d_offline_menu.xml
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/map2d_offline_menu.xml
+END
+menu_choose_building.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/menu_choose_building.xml
+END
+map2d_edit_edge_menu.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/map2d_edit_edge_menu.xml
+END
+menu_select_building_location.xml
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/menu_select_building_location.xml
+END
+map2d_remove_vertex_menu.xml
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/map2d_remove_vertex_menu.xml
+END
+sym_loc_web_menu.xml
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/cs/Users/rhansen/!svn/ver/36/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/sym_loc_web_menu.xml
+END
+mapd2d_online_menu.xml
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/cs/Users/rhansen/!svn/ver/51/Android/WebMapApp/trunk/SmartCampusWebMap/res/menu/mapd2d_online_menu.xml
+END

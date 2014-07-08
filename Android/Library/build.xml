@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SmartCampusLibrary" default="dist" basedir=".">
+   <description>SmartCampus Library</description>
+   <property name="src" location="src" />
+   <property name="bin" location="bin" />
+ 
+   <target name="dist">
+      <jar destfile="SmartCampusLibrary.jar" basedir="bin">
+         <include name="com/**" />
+      </jar>
+   </target>
+</project>

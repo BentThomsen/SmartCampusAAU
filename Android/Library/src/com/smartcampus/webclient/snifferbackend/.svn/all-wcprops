@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/cs/Users/rhansen/!svn/ver/40/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/webclient/snifferbackend
+END
+JsonInfrastructurePositioningClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 160
+/svn/cs/Users/rhansen/!svn/ver/43/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/webclient/snifferbackend/JsonInfrastructurePositioningClient.java
+END
+IInfrastructurePositioningService.java
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/svn/cs/Users/rhansen/!svn/ver/43/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/webclient/snifferbackend/IInfrastructurePositioningService.java
+END
+InfrastructurePositionEstimate.java
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/svn/cs/Users/rhansen/!svn/ver/43/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/webclient/snifferbackend/InfrastructurePositionEstimate.java
+END

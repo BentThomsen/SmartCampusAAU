@@ -1,0 +1,45 @@
+package com.smartcampus.android.location.wifi;
+
+import com.smartcampus.indoormodel.graph.Vertex;
+
+public class EstimateResult {
+	private Vertex mVertex;
+	private double mDistance;
+	private double mErrorEstimate;
+	
+	public EstimateResult(Vertex v, double distance)
+	{
+		this.mVertex = v;
+		this.mDistance = distance;
+	}
+	
+	public double getDistance()
+	{
+		return this.mDistance;
+	}
+	
+	public double getErrorEstimate()
+	{
+		return this.mErrorEstimate;
+	}
+	
+	public Vertex getVertex()
+	{
+		return this.mVertex;
+	}
+	
+	public void setDistance(double distance)
+	{
+		this.mDistance = distance;
+	}
+	
+	public void setErrorEstimate(double d)
+	{
+		this.mErrorEstimate = d;
+	}
+	
+	public void setVertex(Vertex v)
+	{
+		this.mVertex = v;
+	}
+}

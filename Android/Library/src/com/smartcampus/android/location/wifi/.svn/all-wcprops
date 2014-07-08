@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/android/location/wifi
+END
+AlgorithmNNSS.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/android/location/wifi/AlgorithmNNSS.java
+END
+IPositioningAlgorithm.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/cs/Users/rhansen/!svn/ver/53/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/android/location/wifi/IPositioningAlgorithm.java
+END
+AlgorithmHyperNNSS.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/android/location/wifi/AlgorithmHyperNNSS.java
+END
+EstimateResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/android/location/wifi/EstimateResult.java
+END
+BCS.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/android/location/wifi/BCS.java
+END
+WifiPosEngine.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/cs/Users/rhansen/!svn/ver/32/Android/Library/trunk/SmartCampusLibrary/src/com/smartcampus/android/location/wifi/WifiPosEngine.java
+END

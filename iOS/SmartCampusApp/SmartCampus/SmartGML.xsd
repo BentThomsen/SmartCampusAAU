@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="SmartXML.xsd"></xs:include>
+
+  <xs:element name="graph">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="nodes"/>
+        <xs:element ref="edges"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="nodes">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="node" type="graphNodeType"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="edges">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="edge" type="graphEdgeType"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="graphNodeType">
+    <xs:sequence>
+      <xs:element name="point" type="point3dType"/>
+      <xs:element name="location" type="locationType" minOccurs="0"/>
+      <xs:element name="metadata" type="metadataType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="significant" type="xs:boolean" use="optional"/>
+    <xs:attribute name="outdoors" type="xs:boolean" use="optional"/>
+    <xs:attribute name="floor" type="xs:integer" use="optional"/>
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="graphEdgeType">
+    <xs:attribute name="from" type="xs:IDREF"/>
+    <xs:attribute name="to" type="xs:IDREF"/>
+    <xs:attribute name="weight" type="xs:double" use="optional"/>
+    <xs:attribute name="directed" type="xs:boolean" use="optional"/>
+  </xs:complexType>
+
+</xs:schema>

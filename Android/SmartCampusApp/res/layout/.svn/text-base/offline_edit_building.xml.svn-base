@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+    <TextView 
+    	android:text="Building Name (Required):" 
+    	android:id="@+id/offline_edit_building_name_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+    </TextView>
+    <EditText 
+    	android:id="@+id/offline_edit_building_name_editText" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content">
+        <requestFocus></requestFocus>
+    </EditText>
+    
+    <TextView 
+    	android:text="Official URL:" 
+    	android:id="@+id/offline_edit_building_url_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+   	</TextView>
+   	<EditText 
+    	android:id="@+id/offline_edit_building_url_editText" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content">
+   	</EditText>
+   	
+   	<LinearLayout
+ 		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+ 
+	   	<Button
+	   		android:text="Set Location..." 
+		    android:id="@+id/offline_edit_building_set_location_button" 
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content">
+		</Button>
+		<TextView 
+    		android:text="(Required)" 
+    		android:layout_width="wrap_content" 
+    		android:layout_height="wrap_content">
+   		</TextView>
+    </LinearLayout>
+    <TextView 
+    	android:text="Address:" 
+    	android:id="@+id/offline_edit_building_address_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+   	</TextView>
+   	<Button 
+	    	android:text="Save" 
+	    	android:id="@+id/offline_edit_building_save_button" 
+	    	android:layout_width="wrap_content" 
+	    	android:layout_height="wrap_content">
+	</Button>
+</LinearLayout>
+
+
+<!--  Old layout
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+    <TextView 
+    	android:text="Building Name (*):" 
+    	android:id="@+id/offline_edit_building_name_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+    </TextView>
+    <EditText 
+    	android:id="@+id/offline_edit_building_name_editText" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content">
+        <requestFocus></requestFocus>
+    </EditText>
+    <TextView 
+    	android:text="Address (*):" 
+    	android:id="@+id/offline_edit_building_address_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+   	</TextView>
+    <EditText 
+    	android:id="@+id/offline_edit_building_address_editText" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content">
+   	</EditText>
+    <TextView 
+    	android:text="Postal Code (*):" 
+    	android:id="@+id/offline_edit_building_postalcode_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+   	</TextView>
+    <EditText 
+    	android:id="@+id/offline_edit_building_postalcode_editText" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content">
+   	</EditText>
+    <TextView 
+    	android:text="Country (*):" 
+    	android:id="@+id/offline_edit_building_country_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+   	</TextView>
+    <EditText 
+    	android:id="@+id/offline_edit_building_country_editText" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content">
+   	</EditText>
+    <TextView 
+    	android:text="Possible URL:" 
+    	android:id="@+id/offline_edit_building_url_textView" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content">
+   	</TextView>
+   	<EditText 
+    	android:id="@+id/offline_edit_building_url_editText" 
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content">
+   	</EditText>
+   	<Button 
+	    	android:text="Save" 
+	    	android:id="@+id/offline_edit_building_save_button" 
+	    	android:layout_width="wrap_content" 
+	    	android:layout_height="wrap_content">
+	</Button>
+</LinearLayout>
+-->

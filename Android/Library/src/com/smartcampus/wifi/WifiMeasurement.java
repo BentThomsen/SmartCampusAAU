@@ -1,0 +1,254 @@
+/*
+Copyright (c) 2014, Aalborg University
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+package com.smartcampus.wifi;
+
+import java.util.Date;
+
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
+
+public class WifiMeasurement
+{
+	private Date measTimeStart, measTimeEnd;
+	//we save a histogram of recorded values for each mac. 
+	//E.g., if mac MAC1 has registered value -40 6 times, and value -45 5 times, the corresponding histogram would be
+	//histogram[MAC1][-40] = 6; histogram[MAC1][-45] = 5.
+	private Hashtable<String, Hashtable<Integer, Integer>> histogram = new Hashtable<String, Hashtable<Integer, Integer>>();
+	private Hashtable<String, MacInfo> additionalInfo = new Hashtable<String, MacInfo>();
+	
+	//private static final int no_vertex = 42;
+	
+	public static String discardLastCharIfMacIsFull(String mac)
+	{
+		String result;
+		//we strip away the last character of the mac address
+		if (mac.length() == 17)
+			result = mac.substring(0, 16);
+		else
+			result = mac;
+		return result;
+	}
+	
+	public WifiMeasurement()
+	{
+		initializeFields(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+	}	
+	
+	public void addValue(String mac, int ssVal)
+    {
+    	//we discard the last char if it is a full mac as an 
+    	//AP can have several 'sub' macs for the same AP.
+    	mac = discardLastCharIfMacIsFull(mac);
+    	//Add mac if not contained
+        if (!histogram.containsKey(mac))
+        {
+            histogram.put(mac, new Hashtable<Integer, Integer>());            
+        } 
+        //Add ssVal if not contained
+        if (!histogram.get(mac).containsKey(ssVal))
+        {
+        	histogram.get(mac).put(ssVal, 0);
+        }
+        //Add the value to the existing count
+        int existingCount = histogram.get(mac).get(ssVal);
+        histogram.get(mac).put(ssVal, existingCount + 1);
+    }
+	public void addValue(String mac, int ssVal, MacInfo macInfo)
+    {
+    	mac = discardLastCharIfMacIsFull(mac);
+    	if (macInfo != null)
+    		additionalInfo.put(mac, macInfo);
+    	addValue(mac, ssVal);
+    }
+	public Boolean containsMac(String mac)
+    {
+        return histogram.containsKey(mac);
+    }
+		
+	//We are not too concerned with decimal numbers, so we return the avg as an int
+    //(Moreover, this is a legacy from the WinMobile client and the Streamspin server)
+    public int getAvgDbM(String mac)
+    {
+        int totalVal = 0;
+        int totalCount = 0; //the total number of distinct values
+        int curCount = 0;
+        //calculate the total
+        for (int curVal : histogram.get(mac).keySet())
+        {
+        	curCount = histogram.get(mac).get(curVal);
+            totalVal += curVal * curCount;
+            totalCount += curCount;
+        }
+
+        return totalVal / totalCount;            
+    }
+	public Hashtable<Integer, Integer> GetHistogram(String mac)
+    {
+        return histogram.get(mac);
+    }
+	public Hashtable<String, Hashtable<Integer, Integer>> getHistograms() {
+		return this.histogram;
+	}
+    public MacInfo getMacInfo(String mac)
+    {
+    	return additionalInfo.get(mac);
+    }
+   
+    public Hashtable<String, MacInfo> getMacInfos() {
+		return this.additionalInfo;
+	}
+    
+    public Set<String> getMACs()
+    {
+    	return histogram.keySet();      
+    }
+    
+    public Date getMeasTimeEnd()
+	{
+		return measTimeEnd;
+	}
+    
+    /*
+    public void setHistogram2(Histogram hist)
+    {
+    	//NOTE: BEWARE: We have some SSID/BSSID discrepancy.
+    	String mac = hist.getSSID();
+    	mac = discardLastCharIfMacIsFull(mac);
+    	int ssVal = hist.getValue();
+    	int count = hist.getCount();
+    	
+    	//Add mac if not contained
+        if (!histogram.containsKey(mac))
+        {
+            histogram.put(mac, new Hashtable<Integer, Integer>());            
+        } 
+        //Add ssVal if not contained
+        if (!histogram.get(mac).containsKey(ssVal))
+        {
+        	histogram.get(mac).put(ssVal, 0);
+        }
+        //Add the value to the existing count
+        int existingCount = histogram.get(mac).get(ssVal);
+        histogram.get(mac).put(ssVal, existingCount + count);
+    }
+    */
+	
+    //The time the measurement was taken
+	public Date getMeasTimeStart()
+	{
+		return measTimeStart;
+	}
+    
+    public int getNumMACs()
+    {
+        return histogram.keySet().size();
+    }   
+    
+    public double GetStdDev(String mac)
+    {
+        double total = 0;
+        int mean = this.getAvgDbM(mac);
+        int allValues = 0;
+
+        for (int val : histogram.get(mac).keySet()) //val represents each of the distinct recorded values
+        {
+            int numVals = histogram.get(mac).get(val); //the number of times the given val occurs
+            allValues += numVals;
+
+            for (int i = 1; i <= numVals; i++)
+            {
+                total += Math.pow(val - mean, 2);
+            }
+        }
+        return Math.sqrt(total / allValues);            
+    }
+
+    public int getStrongestDbM(String mac)
+    {
+    	int max = -255; //lowest possible RSSI value
+    	for (int ss : histogram.get(mac).keySet())
+    		if (ss > max)
+    			max = ss;
+    	return max;            
+    }    
+    
+    public int getWeakestDbM(String mac)
+    {
+    	int min = 0; //largets possible RSSI value
+        for (int ss : histogram.get(mac).keySet())
+        	if (ss < min)
+        		min = ss;
+        return min;
+    }    
+    
+    private void initializeFields(Date measTimeStart, Date measTimeEnd)
+	{
+		this.measTimeStart = measTimeStart;
+		this.measTimeEnd = measTimeEnd;
+	}
+    
+    public void removeMac(String mac)
+    {
+    	if (histogram.containsKey(mac))
+    		histogram.remove(mac);
+    	if (additionalInfo.containsKey(mac))
+    		additionalInfo.remove(mac);
+    }
+    
+    public void removeMacs(List<String> macs)
+    {
+    	if (macs == null)
+    		return;
+    	
+    	for (int i = 0; i < macs.size(); i++)
+    	{
+    		this.removeMac(macs.get(i));
+    	}
+    }
+     
+    public void setHistogram(Histogram hist)
+    {
+    	histogram.put(hist.getMac(), new Hashtable<Integer, Integer>());
+    	histogram.get(hist.getMac()).put(hist.getValue(), hist.getCount());
+    }
+    
+    public void setMeasTimeEnd(Date time)
+	{
+		this.measTimeEnd = time;
+	}
+    
+    public void setMeasTimeStart(Date time)
+	{
+		this.measTimeStart = time;
+	}  
+}
+
+
+
+

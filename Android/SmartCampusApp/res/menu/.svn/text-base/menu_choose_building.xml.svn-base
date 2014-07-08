@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+         android:id="@+id/mi_refresh_available_buildings" 
+         android:icon="@drawable/ic_menu_refresh" 
+         android:title="Find Nearby Buildings">        
+    </item>
+	<item
+         android:id="@+id/mi_create_new_building" 
+         android:icon="@drawable/ic_menu_add" 
+         android:title="Create New Building">        
+    </item>
+</menu>

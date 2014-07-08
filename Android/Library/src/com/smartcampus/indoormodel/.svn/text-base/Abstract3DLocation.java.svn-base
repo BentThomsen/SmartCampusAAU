@@ -1,0 +1,40 @@
+package com.smartcampus.indoormodel;
+
+public abstract class Abstract3DLocation 
+{
+    private int x, y, z;
+
+    public Abstract3DLocation(int x, int y, int z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getY()
+    {
+        return y;
+    }
+    public int getZ()
+    {
+        return z;
+    }
+
+    public void setX(int value)
+    {
+        x = value;
+    }
+    public void setY(int value)
+    {
+        y = value; 
+    }
+
+    public void setZ(int value)
+    {
+        z = value; 
+    }
+}

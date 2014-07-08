@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+    	android:title="Choose Provider" 
+    	android:icon="@drawable/ic_menu_choose_provider" 
+    	android:id="@+id/provider_choice_online">
+   	</item>
+    <item 
+    	android:title="Change Floor" 
+    	android:icon="@drawable/ic_menu_change_floor" 
+    	android:id="@+id/floor_changer_online">
+   	</item>
+    <item 
+    	android:icon="@drawable/ic_menu_nearby" 
+    	android:title="What's Nearby?" 
+    	android:id="@+id/what_is_here_online">
+   	</item>
+   	<!-- Comment/uncomment w.r.t. Folia (who wants to supply their own search -->
+   	<!-- 
+   	<item 
+    	android:id="@+id/find_nearest" 
+    	android:title="Find Nearest..." 
+    	android:icon="@drawable/ic_menu_find_nearest">
+   	</item>
+   	 -->
+   	<item 
+    	android:icon="@drawable/ic_menu_search" 
+    	android:title="Search" 
+    	android:id="@+id/search_online">
+   	</item>   	
+   	<item 
+    	android:id="@+id/clear_route" 
+    	android:title="Clear Route" 
+    	android:icon="@drawable/ic_menu_clear_route">
+   	</item>
+   	<!-- 
+    <item 
+    	android:icon="@drawable/ic_menu_change_view" 
+    	android:title="Change View" 
+    	android:id="@+id/change_view_online">
+   	</item>
+   	 -->
+   	<item
+   		android:id="@+id/set_stracking_screen" 
+   		android:title="Enable/Disable Tracking">
+ 	</item>
+ 	<!-- Knapper til at tweake med -->
+ 	<!--     
+   	<item 
+    	android:title="Change Update Intvl." 
+    	android:id="@+id/change_update_interval_online">
+   	</item>
+   	<item 
+    	android:title="Change Update Threshold" 
+    	android:id="@+id/change_update_threshold_online">
+   	</item>   	
+   	 -->
+   	<item
+   		android:id="@+id/offline_mode" 
+   		android:icon="@drawable/ic_menu_off" 
+   		android:title="Offline Mode">
+ 	</item>
+ 	<item
+   		android:id="@+id/about_screen" 
+   		android:title="About">
+ 	</item>
+ 	<!-- Uncomment for trusted parties -->
+ 	<!-- 
+ 	<item
+   		android:id="@+id/menu_online_backdoor" 
+   		android:title="Backdoor">
+ 	</item>
+ 	 --> 	
+</menu>

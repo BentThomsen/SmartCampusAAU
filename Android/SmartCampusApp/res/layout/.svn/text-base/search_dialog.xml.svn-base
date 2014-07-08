@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/search_layout"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="10dp" >
+              
+    <ImageView
+    	       android:id="@+id/search_image"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="10dp"
+               android:src="@drawable/ic_menu_search"
+             />
+    <EditText 
+        	android:id="@+id/search_input"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content" />  
+</LinearLayout>

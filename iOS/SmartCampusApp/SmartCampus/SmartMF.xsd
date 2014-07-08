@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="SmartXML.xsd"></xs:include>
+
+  <xs:element name="building">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string"/>
+        <xs:element ref="alternative-names" minOccurs="0"/>
+        <xs:element ref="addresses"/>
+        <xs:element name="location" type="locationType" minOccurs="0"/>
+        <xs:element name="direction-of-north" type="vector3dType" minOccurs="0"/>
+        <xs:element name="model" type="pathType" minOccurs="0"/>
+        <xs:element name="model-units" type="modelUnitsType" minOccurs="0"/>
+        <xs:element ref="graphs" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="alternative-names">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="name" type="xs:string"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="addresses">
+    <xs:complexType>
+      <xs:choice minOccurs="1" maxOccurs="unbounded">
+        <xs:element name="address" type="addressType"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="graphs">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="graph" type="pathType"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="addressType">
+    <xs:sequence>
+      <xs:element name="street" type="xs:string"/>
+      <xs:element name="number" type="xs:string"/>
+      <xs:element name="zip" type="xs:string"/>
+      <xs:element name="city" type="xs:string"/>
+      <xs:element name="country" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pathType">
+    <xs:attribute name="path" type="xs:string" use="required"/>
+  </xs:complexType>
+
+</xs:schema>
