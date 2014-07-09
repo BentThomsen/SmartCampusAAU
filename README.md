@@ -34,7 +34,7 @@ However, iOS devices now support on-device positioning via Bluetooth Low Energy 
 
 <h3>Android</h3>
 <h4>Library</h4>
-The positioning functionality is exposed via the com.smartcampus.android.location.LocationService class (see the SmartCampusAAU web page for details on how to <em>use</em> the positioning library). The class uses a W TODO - CONTINUE
+The positioning functionality is exposed via the com.smartcampus.android.location.LocationService class (see the SmartCampusAAU web page for details on how to <em>use</em> the positioning library). The class delegates the location determination responsibility to a WifiPosEngine class which in turn uses a class that implements the IPositioningAlgorithm interface to arrive at the position estimates. In order to substitute the default algorithm for your own, you can inject an IPositioningAlgorithm implementation into the WifiPosEngine class. 
 
 <h4>SmartCampusApp</h4>
 This is the app that is used to build a (device-based) radio map. 
