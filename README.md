@@ -13,7 +13,7 @@ Instructions on how to use the SmartCampusAAU app to build radio maps can be fou
 
 SmartCampusAAU is based on the location fingerprinting technique which relies on collecting signal strength measurements in a building. SmartCampusAAU supports two kinds of positioning based on the location fingerprinting technique: <em>Device-Based Positioning</em> where Wi-Fi scanning and positioning is done one a user's own SmartPhone, and <em>Infrastructure-Based Positioning</em> where Wi-Fi scanning and positioning is done on the Infrastructure side. Note that whereas Infrastructure-Based Positioning can be done in any building where an ordinary Wi-Fi infrastructure is in place, Infrastructure-Based Positioning requires an extra dedicated positioning infrastructure that is usually not in place.  
 
-<b>IMPORTANT NOTICE:</b> The code from the SmartCampusAAU project is made available as-is. It is no longer being maintained, and we do not offer any advice on how to use or tweak the code in addition to what can be found on this page and on the SmartCampusAAU webpage. 
+<b>IMPORTANT NOTICE:</b> The code from the SmartCampusAAU project is made available as-is. The repository is no longer being maintained, and we are also not available to offer advice on how to use or tweak the code in addition to what can be found in this repository and on the SmartCampusAAU webpage. 
 
 <h2>Structure</h2>
 The following is an overall description of the components that consitute the SmartCampusAAU framework.  
