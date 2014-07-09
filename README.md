@@ -11,11 +11,18 @@ The SmartCampusAAU app has been developed at the Department of Computer Science,
 
 Instructions on how to use the SmartCampusAAU app to build radio maps can be found in the <a href="http://smartcampus.cs.aau.dk/downloads.html">downloads</a> section on the SmartCampusAAU web page. Similarly, the page contains instructions on how to use the SmartCampusAAU library to leverage the indoor positioning and navigation capabilities in one's on app.
 
-SmartCampusAAU is based on the location fingerprinting technique which relies on collecting signal strength measurements in a building. SmartCampusAAU supports two kinds of positioning based on the location fingerprinting technique: <em>Device-Based Positioning</em> where Wi-Fi scanning and positioning is done one a user's own SmartPhone, and <em>Infrastructure-Based Positioning</em>where Wi-Fi scanning and positioning is done on the Infrastructure side.  
+SmartCampusAAU is based on the location fingerprinting technique which relies on collecting signal strength measurements in a building. SmartCampusAAU supports two kinds of positioning based on the location fingerprinting technique: <em>Device-Based Positioning</em> where Wi-Fi scanning and positioning is done one a user's own SmartPhone, and <em>Infrastructure-Based Positioning</em> where Wi-Fi scanning and positioning is done on the Infrastructure side. Note that whereas Infrastructure-Based Positioning can be done in any building where an ordinary Wi-Fi infrastructure is in place, Infrastructure-Based Positioning requires an extra dedicated positioning infrastructure that is usually not in place.  
 
 <h2>Structure</h2>
+The code is divided into the following components: 
+
 <h3>Backend</h3>
-This folder contains the backend. 
+This folder contains the backend. The backend stores the radio maps (Device-Based and/or Infrastructure-Based radio maps). 
+<h4>RadioMapService</h4>
+http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/ . Append '/$metadata' to this URL to view the metadata. 
+
+
+
 
 http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/$metadata
 
