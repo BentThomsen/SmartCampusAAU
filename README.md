@@ -2,3 +2,12 @@ SmartCampusAAU
 ==============
 
 SmartCampusAAU is a framework for enabling indoor positioning and navigation in any building. The SmartCampusAAU framework was created as part of the SmartCampusAAU research project which was carried out at Aalborg University, Denmark. The project's web page can be found at http://smartcampus.cs.aau.dk/ and contains instructions on how to use the framework.
+
+SmartCampusAAU takes a collaborative approach: It is the end users who enable indoor positioning and navigation in a building. This is done by building a so-called radio map using the SmartCampusAAU app (for Android, iPhone or Windows Phone).
+
+Once a radio map has been built, developers can make use of indoor positioning and navigation by importing the SmartCampusAAU library into their app.
+
+The SmartCampusAAU app has been developed at the Department of Computer Science, Aalborg University in collaboration with <a href="http://www.mapspeople.com">MapsPeople</a> who have created tiles that display building floors on top of Google Maps in places where Google itself does not provide this service.
+
+Instructions on how to use the SmartCampusAAU app to build radio maps can be found in the <a href="http://smartcampus.cs.aau.dk/downloads.html">downloads</a> section on the SmartCampusAAU web page. Similarly, the page contains instructions on how to use the SmartCampusAAU library to leverage the indoor positioning and navigation capabilities in one's on app.
+
