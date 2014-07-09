@@ -11,3 +11,11 @@ The SmartCampusAAU app has been developed at the Department of Computer Science,
 
 Instructions on how to use the SmartCampusAAU app to build radio maps can be found in the <a href="http://smartcampus.cs.aau.dk/downloads.html">downloads</a> section on the SmartCampusAAU web page. Similarly, the page contains instructions on how to use the SmartCampusAAU library to leverage the indoor positioning and navigation capabilities in one's on app.
 
+SmartCampusAAU is based on the location fingerprinting technique which relies on collecting signal strength measurements in a building. SmartCampusAAU supports two kinds of positioning based on the location fingerprinting technique: <em>Device-Based Positioning</em> where Wi-Fi scanning and positioning is done one a user's own SmartPhone, and <em>Infrastructure-Based Positioning</em>where Wi-Fi scanning and positioning is done on the Infrastructure side.  
+
+<h2>Structure</h2>
+<h3>Backend</h3>
+This folder contains the backend. 
+
+http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/$metadata
+
