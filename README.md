@@ -26,6 +26,9 @@ http://smartcampusaau.cs.aau.dk/RadioMapService3/RadioMapService.svc/ . Append '
 
 This is the backend that is used in the Android library and app. A radio map is downloaded to the mobile device on-demand when arriving at a building, and then on-device positioning ensues.  
 
-While the current iPhone version relies on infrastructure-based positioning it has now also become possible to use on-device positioning for iOS devices. In order to achieve this, you can port the functionality from the Android library. 
+<h4>WifiSnifferPositioningService</h4>
+This is the backend for Infrastructure-Based radio maps. You may use this code to establish an Infrastructure-Based Positioning Service, but you need to deploy it on your own server. SmartCampusAAU is not hosting such a service as  Infrastructure-Based positioning carry a very large communication overhead.
 
-<h4></h4>
+This is the backend that is used by the iOS and Windows phone apps and libraries as these two platforms do not allow Wi-Fi scanning which is necessary to do device-based positioning.<br>
+However, iOS devices now support on-device positioning via Bluetooth Low Energy (BLE) beacons, aka. iBeacons. In order to achieve this you can port the functionality from the Android library. 
+
