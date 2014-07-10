@@ -39,6 +39,8 @@ The positioning functionality is exposed via the com.smartcampus.android.locatio
 <h4>SmartCampusApp</h4>
 This is the app that is used to build a (device-based) radio map. 
 
+The user interface has been implemented as a web view in collaboration with <a href="http://www.mapspeople.com">MapsPeople</a>. MapsPeople have created tiles that allow building floors to be displayed on top of Google Maps for several buildings used in the SmartCampusAAU project. The communication between the app's native code and the javascript UI takes place in the two files 'com.smartcampus.javascript.DeviceInterface' (where JS files call into the native API) and 'com.smartcampus.javascript.JSInterface' (where the app calls functions in JS files).   
+
 <h4>SmartCampusClient</h4>
 This is a template for a client that uses the SmartCampusAAU positioning library. This project can also be downloaded from the SmartCampusAAU web page, and instructions can also be found there. 
 
